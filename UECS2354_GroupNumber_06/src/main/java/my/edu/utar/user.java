@@ -44,7 +44,6 @@ public class user {
 		id = 0;
 		email = "";
 		phoneNum = 0;
-		
 	}
 	
 	public user(String name, int id, String email, int phone) {
