@@ -2,14 +2,19 @@ package my.edu.utar;
 
 public class applyDiscountSurcharge {
 
-	public static double getPassengerTypeDiscount(String passengerType, double distance) {
-		if (passengerType == "Adult") {
+	public double getPassengerTypeDiscount(String passengerType, double distance) {
+		
+		if (distance < 0) {
+			throw new IllegalArgumentException("Distance cannot be negative");
+		}
+		
+		if (passengerType.equals("Adult")) {
 			return 1.0;
-		} else if (passengerType == "Senior citizen") {
+		} else if (passengerType.equals("Senior Citizen")) {
 			return 0.5;
-		} else if (passengerType == "Student") {
+		} else if (passengerType.equals("Student")) {
 			return 0.7;
-		} else if (passengerType == "Child") {
+		} else if (passengerType.equals("Child")) {
 			if (distance < 5) {
 				return 0;
 			} else {
