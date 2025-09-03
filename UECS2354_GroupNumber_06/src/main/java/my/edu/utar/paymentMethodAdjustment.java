@@ -2,13 +2,18 @@ package my.edu.utar;
 
 public class paymentMethodAdjustment {
 	
-	public static double getPaymentMethodDiscount() {
-		return 1.0;
-		//update later
-	}
 	
-	public static double applyPaymentDiscount() {
-		return 1.0;
-		//update later
+	public static double applyPaymentDiscount(String paymentType, double fare) {
+
+		if (paymentType.equals("e-Wallet")){
+			return fare;
+		}
+		else if (paymentType.equals("Credit Card")) {
+			return 1.05*fare;
+		} else if (paymentType.equals("Online Banking")) {
+			return 0.95*fare;
+		} else {
+			throw new IllegalArgumentException("Payment method not accepted.");
+		}
 	}
 }

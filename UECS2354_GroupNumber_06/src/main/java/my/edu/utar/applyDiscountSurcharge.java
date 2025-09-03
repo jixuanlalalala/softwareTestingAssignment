@@ -1,5 +1,7 @@
 package my.edu.utar;
 
+import java.time.*;
+
 public class applyDiscountSurcharge {
 
 	public double getPassengerTypeDiscount(String passengerType, double distance) {
@@ -25,18 +27,55 @@ public class applyDiscountSurcharge {
 		}
 	}
 	
-	public static double getTimeDateDiscount() {
-		return 1.0;
-		// update later
+	public double getTimeDateDiscount(LocalDateTime ticketDateTime) {
+		
+		if (ticketDateTime == null)
+			throw new IllegalArgumentException("Ticket Date Time cannot be null");
+		
+		DayOfWeek ticketDay = ticketDateTime.getDayOfWeek();
+		LocalTime ticketTime = ticketDateTime.toLocalTime();
+		
+		LocalTime peakHourMorningStart = LocalTime.of(6, 30);
+		LocalTime peakHourMorningEnd = LocalTime.of(9, 30);
+		
+		LocalTime peakHourEveningStart = LocalTime.of(17, 0);
+		LocalTime peakHourEveningEnd = LocalTime.of(20, 0);
+		
+		boolean isPeakHour =  (!ticketTime.isBefore(peakHourMorningStart) && !ticketTime.isAfter(peakHourMorningEnd))
+			     || (!ticketTime.isBefore(peakHourEveningStart) && !ticketTime.isAfter(peakHourEveningEnd));
+		
+		if (ticketDay != DayOfWeek.SATURDAY && ticketDay != DayOfWeek.SUNDAY) {
+			if (isPeakHour) {
+				return 1.2;
+			} else {
+				return 1.0;
+			}
+		} else {
+			return 0.9;
+		}
 	}
 	
-	public static int getFlatSurcharge() {
-		return 1;
-		//update later
+	public int getFlatSurcharge(LocalDateTime ticketDateTime) {
+		if (ticketDateTime == null)
+			throw new IllegalArgumentException("Ticket Date Time cannot be null");
+		
+		DayOfWeek ticketDay = ticketDateTime.getDayOfWeek();
+		LocalTime ticketTime = ticketDateTime.toLocalTime();
+		
+		LocalTime nightTime = LocalTime.of(22,00);
+		
+		if (ticketDay == DayOfWeek.SATURDAY || ticketDay == DayOfWeek.SUNDAY) {
+			return 0;
+		} else {
+			if (!ticketTime.isBefore(nightTime)) {
+				return 2;
+			} else {
+				return 0;
+			}
+		}
 	}
 	
-	public static double getTotalDiscount() {
-		return 1.0;
-		//update later
+	public double getTotalDiscount(String passengerType, double distance, LocalDateTime ticketDateTime) {
+		return getPassengerTypeDiscount(passengerType,distance) * getTimeDateDiscount(ticketDateTime);
 	}
 }
