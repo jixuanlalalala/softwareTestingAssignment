@@ -17,7 +17,6 @@ public class AddGuestUnitTest {
 
 	String filePath = "guest.txt";
 	
-	
 	private Object[] getParamsForTestAddGuestValid() {
 		
 		return new Object[]{
@@ -54,7 +53,6 @@ public class AddGuestUnitTest {
         agMock.addGuest(name, email, phoneNumber, filePath);
 
         // Verify writeStringsToFile called with expected array
-//        String newGuest = name + "|" + email + "|" + phoneNumber;
         verify(mockFu).writeStringsToFile(ER, filePath);
     }
 	

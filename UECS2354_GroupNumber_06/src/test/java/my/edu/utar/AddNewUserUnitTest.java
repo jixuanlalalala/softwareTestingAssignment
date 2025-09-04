@@ -63,8 +63,6 @@ public class AddNewUserUnitTest {
         anuMock.addUser(user, filePath);
 
         // Verify writeStringsToFile called with expected array
-//        String newGuest = name + "|" + email + "|" + phoneNumber;
-        
         verify(mockFu).writeStringsToFile(ER, filePath);
     }
 	

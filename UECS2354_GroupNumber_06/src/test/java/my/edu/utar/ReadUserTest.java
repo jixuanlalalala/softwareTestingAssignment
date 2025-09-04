@@ -17,7 +17,6 @@ public class ReadUserTest {
 
 	String filePath = "user.txt";
 	
-	
 	// Valid Test
 	
 	private Object[] getParamsForTestReadUserValid() {

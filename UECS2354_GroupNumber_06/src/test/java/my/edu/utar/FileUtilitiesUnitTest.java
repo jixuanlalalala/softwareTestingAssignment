@@ -34,7 +34,6 @@ public class FileUtilitiesUnitTest {
 
         // Read back
         String[] stringsFromFile = fu.readStringsFromFile(filePath);
-		
 		assertArrayEquals(stringsFromFile, input);
 	}
 	

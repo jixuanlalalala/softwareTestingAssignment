@@ -25,7 +25,6 @@ public class FileUtilities {
 	}
 	
 	public String[] readStringsFromFile(String fileName) {
-		
 		ArrayList<String> stringsRead = new ArrayList<>();
 
 		File fileToRead = new File(fileName);

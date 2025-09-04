@@ -39,6 +39,5 @@ public class AddNewUser {
         String[] updated = Arrays.copyOf(existing, existing.length + 1);
         updated[existing.length] = user.toString();
         fu.writeStringsToFile(updated, filePath);
-	
 	}
 }

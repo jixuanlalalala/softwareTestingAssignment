@@ -21,7 +21,6 @@ public class AddGuest {
     	fu = new FileUtilities();
     	guestRecords = new ArrayList<String>();
     }
-    
 	
 	public void addGuest(String name, String email, String phoneNumber, String filePath){
 		if (name == null || name.trim().isEmpty()) {

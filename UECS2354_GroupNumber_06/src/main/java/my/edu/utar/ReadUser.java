@@ -41,6 +41,5 @@ public class ReadUser {
     	}
     	return user;
     }
-    	
 
 }
