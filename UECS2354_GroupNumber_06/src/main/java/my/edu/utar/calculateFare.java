@@ -4,12 +4,17 @@ import java.time.LocalDateTime;
 
 public class calculateFare {
 
-	private routeInfo routeInfo;
-	private applyDiscountSurcharge discountModule;
+	private routeInfo ri;
+	private applyDiscountSurcharge aps;
 	
-	public calculateFare(routeInfo routeInfo, applyDiscountSurcharge discountModule) {
-        this.routeInfo = routeInfo;
-        this.discountModule = discountModule;
+	public calculateFare() {
+		ri = new routeInfo();
+		aps = new applyDiscountSurcharge();
+	}
+
+	public calculateFare(routeInfo ri, applyDiscountSurcharge aps) {
+        this.ri = ri;
+        this.aps = aps;
     }
 
 		
@@ -29,21 +34,21 @@ public class calculateFare {
 			 return 20.0;
 	}
 	 
-	public double calTotalFare(String passengerType, int qtt, String day, LocalDateTime time, String start, String end, String paymentMethod) {
+	public double calTotalFare(String passengerType, int qtt, LocalDateTime time, String start, String end) {
 		double totalFare = 0.0;
 		
-		int i = 0;
-		while(i < qtt) {
-			double distance = routeInfo.getDistance(start,end);
-			double baseFare = getBaseFare(distance);
-			double passengerDiscount = discountModule.getPassengerTypeDiscount(passengerType,distance);
-			double dayTimeDiscount = discountModule.getTimeDateDiscount(time);
-				
-			totalFare += (baseFare * passengerDiscount * dayTimeDiscount) ;
-			
-			i++;
-		}
-		 
-		 return totalFare;
+		ri.setDistance(start, end);
+		
+		double distance = ri.getDistance();
+		
+		double baseFare = getBaseFare(distance);
+		
+		double totalDiscount = aps.getTotalDiscount(passengerType,distance,time);
+		
+		int flatSurcharge = aps.getFlatSurcharge(time);
+		
+		totalFare = (baseFare*totalDiscount + (double)flatSurcharge)*qtt;	
+		
+		return totalFare;
 	}
 }

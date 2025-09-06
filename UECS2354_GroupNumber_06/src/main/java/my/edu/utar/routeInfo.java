@@ -32,8 +32,9 @@ public class routeInfo{
 		        6.0, 4.0, 2.0, 4.5, 16.0
 	};
 
+	private double distance = 0.0;
 	
-	public double getDistance(String start, String end) { 
+	public void setDistance(String start, String end) { 
 		if (start == null || end == null) {
 	        throw new IllegalArgumentException("Start or end station cannot be null.");
 	    }
@@ -46,20 +47,26 @@ public class routeInfo{
 		for (int i = 0; i< routes.length; i++) {
 	        String from = routes[i][0];
 	        String to = routes[i][1];
-	        double distance = distances[i];
+	        
 	        //forward direction
 	        if(from.equals(start) && to.equals(end)) {
-	        	return distance;
+	        	distance = distances[i];
+	        	return;
 	        }
 			
 			//reverse direction
 			else if(from.equals(end) && to.equals(start)) {
-				return distance;
+				distance = distances[i];
+				return;
 			}
 		}
 		
 		//if the start station and end station is not match
 		throw new IllegalArgumentException("No route found between " + start + " and " + end);
+	}
+	
+	public double getDistance() {
+		return distance;
 	}
 	
 }
