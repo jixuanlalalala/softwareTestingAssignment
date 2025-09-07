@@ -1,8 +1,5 @@
 package my.edu.utar;
 
-import java.io.*;
-import java.util.Scanner;
-
 /**
  * ReadUser class for the Travel Ticket Booking system.
  * Reads user details from a text file based on user ID.

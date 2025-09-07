@@ -1,7 +1,6 @@
 package my.edu.utar;
 
-import java.io.*;
-import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * AddGuest class for the Travel Ticket Booking system.
@@ -10,16 +9,13 @@ import java.util.ArrayList;
 public class AddGuest {
 	
 	FileUtilities fu;
-	ArrayList<String> guestRecords;
 	
 	public AddGuest(FileUtilities fu) {
 		this.fu = fu;
-		guestRecords = new ArrayList<String>();
 	}
     
     public AddGuest() {
     	fu = new FileUtilities();
-    	guestRecords = new ArrayList<String>();
     }
 	
 	public void addGuest(String name, String email, String phoneNumber, String filePath){
@@ -34,25 +30,22 @@ public class AddGuest {
 		if (phoneNumber == null || phoneNumber.trim().isEmpty()) {
 			throw new IllegalArgumentException("Invalid Phone Number !");
 		}
-		
-		if (!(phoneNumber.length() >= 10 && phoneNumber.length() <= 12)) {
+		if (!(phoneNumber.trim().length() >= 10 && phoneNumber.trim().length() <= 12)) {
 			throw new IllegalArgumentException("Invalid Phone Number length !");
+		}
+		if (!phoneNumber.matches("\\d+")) { // Checks if the string contains only digits
+		    throw new IllegalArgumentException("Invalid Phone Number format ! Must be all digits.");
 		}
 		
 		String stringToWrite = name + "|" + email + "|" + phoneNumber;
 		
 		// append new  User To Original User String
-		String[] stringRead = fu.readStringsFromFile(filePath);
-		for (String s : stringRead) {
-			guestRecords.add(s);
-		}
-		guestRecords.add(stringToWrite);
+		String[] existing  = fu.readStringsFromFile(filePath);
+		// Append to existing
+        String[] updated = Arrays.copyOf(existing, existing.length + 1);
+        updated[existing.length] = stringToWrite;
 		
-		// Arraylist to String
-		String[] strArray = new String[guestRecords.size()];
-		strArray = guestRecords.toArray(strArray);
-		
-		
-		fu.writeStringsToFile(strArray, filePath);
+        fu.writeStringsToFile(updated, filePath);
+        
 	}	
 }

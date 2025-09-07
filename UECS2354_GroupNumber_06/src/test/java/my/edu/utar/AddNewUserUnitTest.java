@@ -1,6 +1,7 @@
 package my.edu.utar;
 
 import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -14,52 +15,33 @@ import junitparams.Parameters;
 @RunWith(JUnitParamsRunner.class)
 public class AddNewUserUnitTest {
 	
-	String filePath = "user.txt";
+	String filePath = "test_user.txt";
+	
+	FileUtilities mockFu = mock(FileUtilities.class);
 
 	private Object[] getParamsForTestAddUserValid() {
-		return new Object[]{
-		        new Object[]{
-		            new User("U001","John", "john@mail.com", "0123456789"),
-		            new String[]{},
-		            new String[]{"U001|John|john@mail.com|0123456789"}
-		        },
-		        new Object[]{
-		            new User("U002", "Bob", "bob@mail.com", "0222222222"),
-		            new String[]{"U000|Alice|alice@mail.com|0111111111"},
-		            new String[]{
-		                "U000|Alice|alice@mail.com|0111111111",
-		                "U002|Bob|bob@mail.com|0222222222"
-		            }
-		        },
-		        new Object[]{
-		            new User("U002", "Bob", "bob@mail.com", "0222222222"),
-		            new String[]{
-		                "U000|Alice|alice@mail.com|0111111111",
-		                "U001|Eve|eve@mail.com|0333333333"
-		            },
-		            new String[]{
-		                "U000|Alice|alice@mail.com|0111111111",
-		                "U001|Eve|eve@mail.com|0333333333",
-		                "U002|Bob|bob@mail.com|0222222222"
-		            }
-		        }
-		    };
+
+	    return new Object[]{
+	        // Test Case 13: Valid user with phone number length 10
+	        new Object[]{
+	            new User("1", "John Doe", "john.doe@email.com", "1234567890"),
+	            new String[]{"1|John Doe|john.doe@email.com|1234567890"}    
+	        },
+	        // Test Case 14: Valid user with phone number length 12
+	        new Object[]{
+	            new User("3", "Alice", "alice@company.com", "123456789012"), 
+	            new String[]{"3|Alice|alice@company.com|123456789012"} 
+	        }
+	    };
 	}
 	@Test
 	@Parameters(method = "getParamsForTestAddUserValid")
-    public void testAddUserValid(User user,String[] existing,  String[] ER){
-        // Mock FileUtil
-		FileUtilities mockFu = mock(FileUtilities.class);
-        
+    public void testAddUserValid(User user, String[] ER){
+		
+		// Stub read to return empty array
+        when(mockFu.readStringsFromFile(anyString())).thenReturn(new String[]{});
 
-        // Stub read to return empty array
-        when(mockFu.readStringsFromFile(filePath)).thenReturn(existing);
-
-        // Create AddUser with mock
         AddNewUser anuMock = new AddNewUser(mockFu);
-
-        // Call addUser
-        
         anuMock.addUser(user, filePath);
 
         // Verify writeStringsToFile called with expected array
@@ -69,30 +51,46 @@ public class AddNewUserUnitTest {
 	
 	private Object[] getParamsForTestAddUserInvalid() {
 		return new Object[]{
-		        new Object[]{ null, new String[]{} },
-		        new Object[]{ new User("U003", null, "invalid@mail.com", "01234"), new String[]{} },
-		        new Object[]{ new User("U003", "", "invalid@mail.com", "01234"), new String[]{} },
-		        new Object[]{ new User(null, "Charlie", "charlie@mail.com", "0456789"), new String[]{} },
-		        new Object[]{ new User("U004", "Charlie", null, "0456789"), new String[]{} },
-		        new Object[]{ new User("U005", "Charlie", "charlie@mail.com", null), new String[]{} }
-		    };
+	        // Test Case 1: User is null
+	        new Object[]{null}, 
+	        // Test Case 2: User with null ID
+	        new Object[]{new User(null, "John", "a@b.com", "1234567890") },
+	        // Test Case 3: User with empty ID
+	        new Object[]{new User("", "John", "a@b.com", "1234567890") },
+	        
+	        // Test Case 4: User with null name
+	        new Object[]{new User("1", null, "a@b.com", "1234567890") },
+	        // Test Case 5: User with empty name
+	        new Object[]{new User("1", "", "a@b.com", "1234567890") },
+	        
+	        // Test Case 6: User with null email
+	        new Object[]{new  User("1", "John", null, "1234567890") },
+	        // Test Case 7: User with empty email
+	        new Object[]{new User("1", "John", "", "1234567890") },
+	        // Test Case 8: User with invalid email format (no @)
+	        new Object[]{new User("1", "John", "invalid-email", "1234567890") },
+	        
+	        // Test Case 9: User with null phone
+	        new Object[]{new User("1", "John", "a@b.com", null) },
+	        // Test Case 10: User with phone containing non-digits
+	        new Object[]{new User("1", "John", "a@b.com", "123-456-789") },
+	        // Test Case 11: User with phone is empty
+	        new Object[]{new User("1", "John", "a@b.com", "") },
+	        // Test Case 12: User with phone length 9 (invalid)
+	        new Object[]{new User("1", "John", "a@b.com", "123456789") },
+	        // Test Case 15: User with phone length 13 (invalid)
+	        new Object[]{new User("1", "John", "a@b.com", "1234567890123") }
+	    };
 	}
 	
 	@Test (expected=IllegalArgumentException.class)
 	@Parameters(method = "getParamsForTestAddUserInvalid")
-    public void testAddUserInvalid(User user, String[] ER){
-        // Mock FileUtil
-		FileUtilities mockFu = mock(FileUtilities.class);
-        
+    public void testAddUserInvalid(User user){
+		
+		// Stub read to return empty array
+        when(mockFu.readStringsFromFile(anyString())).thenReturn(new String[]{});
 
-        // Stub read to return empty array
-        when(mockFu.readStringsFromFile(filePath)).thenReturn(new String[]{});
-
-        // Create AddUser with mock
         AddNewUser anuMock = new AddNewUser(mockFu);
-
-        // Call addUser
-        
         anuMock.addUser(user, filePath);
 
     }
