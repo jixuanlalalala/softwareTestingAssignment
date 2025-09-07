@@ -22,11 +22,16 @@ public class calculateFareTest {
 	
 	@Test
 	@Parameters({
-		"2.5,2.00",
-		"7.5,5.00",
-		"12.5,10.00",
-		"17.5,15.00",
-		"25.0,20.00"})
+		"1.0,2.00",
+		"5.0,2.00",
+		"6.0,5.00",
+		"10.0,5.00",
+		"11.0,10.00",
+		"15.0,10.00",
+		"16.0,15.00",
+		"20.0,15.00",
+		"21.0,20.00",
+		"30.0,20.00"})
 	public void testGetBaseRateValidValue(double distance, double ER) {
 		double AR = cf.getBaseFare(distance);
 		

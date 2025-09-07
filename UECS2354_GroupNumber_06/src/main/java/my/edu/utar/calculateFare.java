@@ -19,7 +19,7 @@ public class calculateFare {
 
 		
 	public double getBaseFare(double distance) {
-		 if (distance < 1 || distance > 30) {
+		 if (distance <= 0 || distance > 30) {
 	        throw new IllegalArgumentException("Distance must be between 1 km and 30 km");
 	     }
 		 if(distance <= 5)
@@ -36,6 +36,10 @@ public class calculateFare {
 	 
 	public double calTotalFare(String passengerType, int qtt, LocalDateTime time, String start, String end) {
 		double totalFare = 0.0;
+		
+		if (qtt < 0) {
+			throw new IllegalArgumentException("Quantity cannot below 0.");
+		}
 		
 		ri.setDistance(start, end);
 		
