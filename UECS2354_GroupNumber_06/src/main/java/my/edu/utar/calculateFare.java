@@ -38,7 +38,7 @@ public class calculateFare {
 		double totalFare = 0.0;
 		
 		if (qtt < 0) {
-			throw new IllegalArgumentException("Quantity cannot below 0.");
+			throw new IllegalArgumentException("Quantity cannot be negative.");
 		}
 		
 		ri.setDistance(start, end);

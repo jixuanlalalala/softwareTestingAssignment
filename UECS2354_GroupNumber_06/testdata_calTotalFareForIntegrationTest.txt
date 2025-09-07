@@ -1,0 +1,20 @@
+Adult, 2, 2025-09-03T06:45, Bangsar, KL Sentral, 4.80
+Adult, 2, 2025-09-03T18:30, Subang Jaya, Shah Alam, 12.00
+Adult, 2, 2025-09-03T22:45, KL Sentral, Kepong Sentral, 24.00
+Adult, 2, 2025-09-03T14:00, KL Sentral, Subang Jaya, 30.00
+Adult, 2, 2025-09-06T14:00, Batu Kentonmen, Rawang, 36.00
+Senior Citizen, 3, 2025-09-03T06:45, Bangsar, KL Sentral, 3.60
+Senior Citizen, 3, 2025-09-03T18:30, Subang Jaya, Shah Alam, 9.00
+Senior Citizen, 3, 2025-09-03T22:30, KL Sentral, Kepong Sentral, 21.00
+Senior Citizen, 3, 2025-09-03T12:00, KL Sentral, Subang Jaya, 22.50
+Senior Citizen, 3, 2025-09-06T14:00, Batu Kentonmen, Rawang, 27.00
+Student, 1, 2025-09-02T06:45, Bangsar, KL Sentral, 1.68
+Student, 1, 2025-09-03T18:30, Subang Jaya, Shah Alam, 4.20
+Student, 1, 2025-09-04T22:45, KL Sentral, Kepong Sentral, 9.00
+Student, 1, 2025-09-04T14:00, KL Sentral, Subang Jaya, 10.50
+Student, 1, 2025-09-06T22:30, Batu Kentonmen, Rawang, 12.60
+Child, 2, 2025-09-03T07:30, Bangsar, KL Sentral, 0.00
+Child, 2, 2025-09-03T18:30, Subang Jaya, Shah Alam, 6.00
+Child, 2, 2025-09-03T22:45, KL Sentral, Kepong Sentral, 14.00
+Child, 2, 2025-09-03T14:00, KL Sentral, Subang Jaya, 15.00
+Child, 2, 2025-09-06T11:45, Batu Kentonmen, Rawang, 18.00
