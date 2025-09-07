@@ -116,7 +116,7 @@ public class calculateFareTest {
 	
 	@Test
 	@Parameters(method="getDataFortestValidCalTotalFare")
-	public void testIntegrationCalTotalFare(String passengerType, int qtt, LocalDateTime time, String start, String end,double ER) {
+	public void testIntegrationForValidCalTotalFare(String passengerType, int qtt, LocalDateTime time, String start, String end,double ER) {
 		routeInfo ri = new routeInfo();
 	    applyDiscountSurcharge ads = new applyDiscountSurcharge();
 
@@ -125,6 +125,26 @@ public class calculateFareTest {
 	    double AR = cf.calTotalFare(passengerType, qtt, time, start, end);
 
 	    assertEquals(ER, AR, 0.001);
+	}
+	
+	private Object[] parametersForTestIntegrationForInvalidCalTotalFare() {
+	    return new Object[] {
+	        new Object[] { "Lecturer", 2, LocalDateTime.parse("2025-09-03T22:30"), "Batu Kentonmen", "Rawang" },
+	        new Object[] { "Child", -1, LocalDateTime.parse("2025-09-03T22:30"), "Batu Kentonmen", "Rawang" },
+	        new Object[] { "Child", 2, LocalDateTime.parse("2025-09-03T22:30"), null, "Rawang" },
+	        new Object[] { "Child", 2, LocalDateTime.parse("2025-09-03T22:30"), "Batu Kentonmen", "Sungai Long" },
+	        new Object[] { "Child", 2, null, "Batu Kentonmen", "Rawang" }
+	    };
+	}
+	@Test(expected = IllegalArgumentException.class)
+	@Parameters
+	public void testIntegrationForInvalidCalTotalFare(String passengerType, int qtt, LocalDateTime time, String start, String end) {
+		routeInfo ri = new routeInfo();
+	    applyDiscountSurcharge ads = new applyDiscountSurcharge();
+
+	    calculateFare cf = new calculateFare(ri, ads);
+	    
+	    cf.calTotalFare(passengerType, qtt, time, start, end);
 	}
 
 }
