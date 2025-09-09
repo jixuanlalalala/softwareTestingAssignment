@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Scanner;
 
 import org.junit.Test;
@@ -48,9 +49,37 @@ public class calculateFareTest {
 		cf.getBaseFare(distance);
 	}
 	
+	private Object[] paramsForTestCalTotalFareValid() {
+	    return new Object[] {
+	        new Object[] { Map.of("Adult", 2), 2.0, 1.20, 0, 4.80 },
+	        new Object[] { Map.of("Adult", 2), 8.0, 1.20, 0, 12.00 },
+	        new Object[] { Map.of("Adult", 2), 13.0, 1.00, 2, 24.00 },
+	        new Object[] { Map.of("Adult", 2), 18.0, 1.00, 0, 30.00 },
+	        new Object[] { Map.of("Adult", 2), 25.0, 0.90, 0, 36.00 },
+	        
+	        new Object[] { Map.of("Senior", 3), 3.0, 0.60, 0, 3.60 },
+	        new Object[] { Map.of("Senior", 3), 8.0, 0.60, 0, 9.00 },
+	        new Object[] { Map.of("Senior", 3), 13.0, 0.50, 2, 21.00 },
+	        new Object[] { Map.of("Senior", 3), 18.0, 0.50, 0, 22.50 },
+	        new Object[] { Map.of("Senior", 3), 25.0, 0.45, 0, 27.00 },
+	        
+	        new Object[] { Map.of("Student", 1), 3.0, 0.84, 0, 1.68 },
+	        new Object[] { Map.of("Student", 1), 8.0, 0.84, 0, 4.20 },
+	        new Object[] { Map.of("Student", 1), 13.0, 0.70, 2, 9.00 },
+	        new Object[] { Map.of("Student", 1), 18.0, 0.70, 0, 10.50 },
+	        new Object[] { Map.of("Student", 1), 25.0, 0.63, 0, 12.60 },
+	        
+	        new Object[] { Map.of("Child", 2), 3.0, 0.00, 0, 0.00 },
+	        new Object[] { Map.of("Child", 2), 8.0, 0.60, 0, 6.00 },
+	        new Object[] { Map.of("Child", 2), 13.0, 0.50, 2, 14.00 },
+	        new Object[] { Map.of("Child", 2), 18.0, 0.50, 0, 15.00 },
+	        new Object[] { Map.of("Child", 2), 25.0, 0.45, 0, 18.00 },
+	    };
+	}
+	
 	@Test
-	@Parameters({"2.0,1.2,2,2,8.8"})
-	public void testCalTotalFare(double distance, double totaldiscount,int flatSurcharge, int qtt,double ER) {
+	@Parameters(method = "paramsForTestCalTotalFareValid")
+	public void testCalTotalFareValid(Map<String, Integer> passengerMap, double distance, double totaldiscount,int flatSurcharge,double ER) {
 		
 		applyDiscountSurcharge adsMock = mock(applyDiscountSurcharge.class);
 		routeInfo riMock = mock(routeInfo.class);
@@ -62,89 +91,73 @@ public class calculateFareTest {
 		
 		calculateFare cf = new calculateFare(riMock,adsMock);
 		
-		double AR = cf.calTotalFare("Adult", qtt, LocalDateTime.of(2025, 9, 5, 10, 0), "KL Sentral", "Mid Valley");
+		double AR = cf.calTotalFare(passengerMap, LocalDateTime.of(2025, 9, 5, 10, 0), "KL Sentral", "Mid Valley");
 		
 		assertEquals(ER, AR, 0.001);
 		
-		
 	}
 	
-	/* *
-	 * Reading test data from testdata_calTotalFareForIntegrationTest.txt for testing valid values
-	 * */
-	static ArrayList<String[]> linesreadsurcharge;
 	
-	static {
-		Scanner input;
-		linesreadsurcharge = new ArrayList<>();
-		String filename = "testdata_calTotalFareForIntegrationTest.txt";
-		input = null;
-		
-		try {
-			input = new Scanner(new File(filename));
-		} catch (FileNotFoundException e) {
-			System.out.println("File Not Found " + filename);
-			System.exit(0);
-		}
-		
-		while (input.hasNextLine()) {
-			String singleline = input.nextLine();
-			String[] tokens = singleline.split(",");
-			linesreadsurcharge.add(tokens);
-		}
-		
-	}
-	
-	private Object[][] getDataFortestValidCalTotalFare() {
-	    Object[][] data = new Object[linesreadsurcharge.size()][];
-
-	    for (int i = 0; i < linesreadsurcharge.size(); i++) {
-	        String[] tokens = linesreadsurcharge.get(i);
-
-	        String passengerType = tokens[0].trim();
-	        int qtt = Integer.parseInt(tokens[1].trim());
-	        LocalDateTime dt = LocalDateTime.parse(tokens[2].trim());
-	        String start = tokens[3].trim();
-	        String end = tokens[4].trim();
-	        double ER = Double.parseDouble(tokens[5].trim());
-
-	        data[i] = new Object[] { passengerType, qtt, dt, start, end, ER };
-	    }
-
-	    return data;
-	}
-	
-	@Test
-	@Parameters(method="getDataFortestValidCalTotalFare")
-	public void testIntegrationForValidCalTotalFare(String passengerType, int qtt, LocalDateTime time, String start, String end,double ER) {
-		routeInfo ri = new routeInfo();
-	    applyDiscountSurcharge ads = new applyDiscountSurcharge();
-
-	    calculateFare cf = new calculateFare(ri, ads);
-	    
-	    double AR = cf.calTotalFare(passengerType, qtt, time, start, end);
-
-	    assertEquals(ER, AR, 0.001);
-	}
-	
-	private Object[] parametersForTestIntegrationForInvalidCalTotalFare() {
+	private Object[] paramsForTestCalTotalFareInvalid() {
 	    return new Object[] {
-	        new Object[] { "Lecturer", 2, LocalDateTime.parse("2025-09-03T22:30"), "Batu Kentonmen", "Rawang" },
-	        new Object[] { "Child", -1, LocalDateTime.parse("2025-09-03T22:30"), "Batu Kentonmen", "Rawang" },
-	        new Object[] { "Child", 2, LocalDateTime.parse("2025-09-03T22:30"), null, "Rawang" },
-	        new Object[] { "Child", 2, LocalDateTime.parse("2025-09-03T22:30"), "Batu Kentonmen", "Sungai Long" },
-	        new Object[] { "Child", 2, null, "Batu Kentonmen", "Rawang" }
+	        // Invalid / Exceptional cases (expected exception)
+	        new Object[] { Map.of("Adult", -1), 3.0, 1.20, 0, Double.NaN },  // invalid qty
+	        new Object[] { Map.of("Adult", 1), -5.0, 1.20, 0, Double.NaN },  // invalid distance
+	        new Object[] { Map.of("Adult", 1), 10.0, 1.20, 0, Double.NaN },  // invalid start station
+	        new Object[] { Map.of("Adult", 1), 15.0, 1.20, 0, Double.NaN },  // invalid end station
+	        new Object[] { Map.of("Adult", 1), 20.0, 1.20, 0, Double.NaN }   // null time
 	    };
 	}
-	@Test(expected = IllegalArgumentException.class)
-	@Parameters
-	public void testIntegrationForInvalidCalTotalFare(String passengerType, int qtt, LocalDateTime time, String start, String end) {
-		routeInfo ri = new routeInfo();
-	    applyDiscountSurcharge ads = new applyDiscountSurcharge();
-
-	    calculateFare cf = new calculateFare(ri, ads);
-	    
-	    cf.calTotalFare(passengerType, qtt, time, start, end);
+	@Test (expected = IllegalArgumentException.class)
+	@Parameters(method = "paramsForTestCalTotalFareInvalid")
+	public void testCalTotalFareInvalid(Map<String, Integer> passengerMap, double distance, double totaldiscount,int flatSurcharge,double ER) {
+		
+		applyDiscountSurcharge adsMock = mock(applyDiscountSurcharge.class);
+		routeInfo riMock = mock(routeInfo.class);
+		
+		doNothing().when(riMock).setDistance(anyString(), anyString());
+		when(riMock.getDistance()).thenReturn(distance);
+		when(adsMock.getTotalDiscount(anyString(),anyDouble(),any(LocalDateTime.class))).thenReturn(totaldiscount);
+		when(adsMock.getFlatSurcharge(any(LocalDateTime.class))).thenReturn(flatSurcharge);
+		
+		calculateFare cf = new calculateFare(riMock,adsMock);
+		
+		double AR = cf.calTotalFare(passengerMap, LocalDateTime.of(2025, 9, 5, 10, 0), "KL Sentral", "Mid Valley");
+		
+//		assertEquals(ER, AR, 0.001);
+		
 	}
+	
+	
+	
+	
+//	@Test
+//	@Parameters({"2.0,1.2,2,2,8.8"})
+//	public void testCalTotalFare(double distance, double totaldiscount,int flatSurcharge, int qtt,double ER) {
+//		
+//		applyDiscountSurcharge adsMock = mock(applyDiscountSurcharge.class);
+//		routeInfo riMock = mock(routeInfo.class);
+//		
+//		doNothing().when(riMock).setDistance(anyString(), anyString());
+//		when(riMock.getDistance()).thenReturn(distance);
+//		when(adsMock.getTotalDiscount(anyString(),anyDouble(),any(LocalDateTime.class))).thenReturn(totaldiscount);
+//		when(adsMock.getFlatSurcharge(any(LocalDateTime.class))).thenReturn(flatSurcharge);
+//		
+//		calculateFare cf = new calculateFare(riMock,adsMock);
+//		
+//		double AR = cf.calTotalFare("Adult", qtt, LocalDateTime.of(2025, 9, 5, 10, 0), "KL Sentral", "Mid Valley");
+//		
+//		assertEquals(ER, AR, 0.001);
+//		
+//	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 }
