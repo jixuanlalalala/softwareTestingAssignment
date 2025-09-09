@@ -3,9 +3,9 @@ package my.edu.utar;
 public class paymentMethodAdjustment {
 	
 	
-	public static double applyPaymentDiscount(String paymentType, double fare) {
+	public double applyPaymentDiscount(String paymentType, double fare) {
 
-		if (paymentType.equals("e-Wallet")){
+		if (paymentType.equals("E-Wallet")){
 			return fare;
 		}
 		else if (paymentType.equals("Credit Card")) {

@@ -87,8 +87,8 @@ public class applyDiscountSurchargeUnitTest {
 		
 	}
 	
-	private Object[][] getDateFortestValidGetTimeDateDiscount() {
-		Object[][] data = new Object[linesreaddiscount.size()][];
+	private Object[] getDateFortestValidGetTimeDateDiscount() {
+		Object[] data = new Object[linesreaddiscount.size()][];
 		for (int i =0; i<linesreaddiscount.size(); i++) {
 			String[] tokens = linesreaddiscount.get(i);
 			
@@ -165,7 +165,7 @@ public class applyDiscountSurchargeUnitTest {
 	
 	//Test what if passing null value into getTimeDateDiscount
 	@Test(expected=IllegalArgumentException.class)
-	public void testInalidGetFlatSurcharge() {
+	public void testInvalidGetFlatSurcharge() {
 		ads.getFlatSurcharge(null);
 	}
 	
@@ -195,8 +195,8 @@ public class applyDiscountSurchargeUnitTest {
 		
 	}
 	
-	private Object[][] getDateFortestGetTotalDiscount() {
-		Object[][] data = new Object[linesreadtotaldiscount.size()][];
+	private Object[] getDateFortestGetTotalDiscount() {
+		Object [] data = new Object[linesreadtotaldiscount.size()][];
 		for (int i =0; i<linesreadtotaldiscount.size(); i++) {
 			String[] tokens = linesreadtotaldiscount.get(i);
 			

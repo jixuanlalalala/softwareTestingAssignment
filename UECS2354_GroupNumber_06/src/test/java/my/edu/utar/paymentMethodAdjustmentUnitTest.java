@@ -17,8 +17,8 @@ public class paymentMethodAdjustmentUnitTest {
 
 	@Test
 	@Parameters({
-		"e-Wallet,0,0",
-		"e-Wallet,15,15",
+		"E-Wallet,0,0",
+		"E-Wallet,15,15",
 		"Credit Card,0,0",
 		"Credit Card,15,15.75",
 		"Online Banking,0,0",

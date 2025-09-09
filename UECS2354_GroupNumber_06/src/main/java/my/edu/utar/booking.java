@@ -207,7 +207,7 @@ public class booking {
         System.out.print("Please select your start station (1-" + FROM_STATIONS.size() + "): ");
         int choice = getValidIntegerInput(1, FROM_STATIONS.size());
         
-        //retrive the start station from the list
+        //retrieve the start station from the list
         this.startStation = FROM_STATIONS.get(choice - 1);
         return this.startStation;
     }
@@ -289,7 +289,17 @@ public class booking {
         }
     }
     
-    // Process complete booking
+    // Get payment status
+    public String getPaymentStatus() {
+		return paymentStatus;
+	}
+
+    // Set payment status
+	public void setPaymentStatus(String paymentStatus) {
+		this.paymentStatus = paymentStatus;
+	}
+
+	// Process complete booking
     public void processBooking() {
         try {
             // Get route info and calculate fare
@@ -345,6 +355,12 @@ public class booking {
         System.out.println("=".repeat(50));
     }
     
+    // Process payment
+    public boolean confirmAndPay() {
+    	payment py = new payment();
+    	return py.processPayment(paymentMethod);
+    }
+    
     // Utility methods
     private int getValidIntegerInput(int min, int max) {
         while (true) {
@@ -378,6 +394,8 @@ public class booking {
             throw new IllegalArgumentException("Invalid email format");
         }
     }
+    
+    
     
     // Main method for testing
     public static void main(String[] args) {
