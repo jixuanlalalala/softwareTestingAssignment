@@ -12,7 +12,7 @@ import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
 
 @RunWith(JUnitParamsRunner.class)
-public class ReadUserTest {
+public class ReadUserUnitTest {
 
 	private String filePath = "test_user.txt";
 	
