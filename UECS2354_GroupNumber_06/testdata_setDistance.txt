@@ -1,0 +1,20 @@
+KL Sentral, Mid Valley, 5.0
+KL Sentral, Subang Jaya, 18.0
+Subang Jaya, Shah Alam, 7.0
+Bangsar, KL Sentral, 2.0
+KL Sentral, Kepong Sentral, 12.5
+Sentul Timur, Titiwangsa, 3.5
+Titiwangsa, Ampang Park, 4.0
+Ampang Park, KLCC, 1.0
+KLCC, Masjid Jamek, 3.0
+Masjid Jamek, Bandaraya, 1.5
+Bandaraya, Batu Kentonmen, 10.0
+Batu Kentonmen, Rawang, 26.0
+Rawang, Sungai Buloh, 12.0
+Sungai Buloh, Kepong Sentral, 9.5
+Serdang, Kajang, 10.0
+Kajang, Semenyih Sentral, 6.0
+Gombak, Taman Melati, 4.0
+Taman Melati, Wangsa Maju, 2.0
+Wangsa Maju, Setiawangsa, 4.5
+Setiawangsa, KL Sentral, 16.0

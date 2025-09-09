@@ -35,6 +35,7 @@ public class calculateFare {
 			 return 20.0;
 	}
 	 
+	
 	public double calTotalFare(Map<String, Integer> passengerMap, LocalDateTime time, String start, String end) {
 		if (passengerMap == null || passengerMap.isEmpty()) {
 	        throw new IllegalArgumentException("Passenger map cannot be null or empty.");
