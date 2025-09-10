@@ -7,7 +7,25 @@ public class User {
 	private String phoneNumber;
 	
 	public User(String id, String name, String email, String phoneNumber) {
-	    this.id = id;
+		if(id== null || id.trim().isEmpty())
+			throw new IllegalArgumentException("id cannot be empty or null");
+		
+		if(name== null || name.trim().isEmpty())
+			throw new IllegalArgumentException("name cannot be empty or null");
+
+		if(email== null || email.trim().isEmpty())
+			throw new IllegalArgumentException("email cannot be empty or null");
+		
+		if(!email.matches("^[\\w.-]+@[\\w.-]+\\.\\w+$"))
+			throw new IllegalArgumentException("Invalid email format") ;
+		
+		if(phoneNumber== null || phoneNumber.trim().isEmpty())
+			throw new IllegalArgumentException("phoneNumber cannot be empty or null");
+		
+		if(!phoneNumber.matches("\\d{10,12}") )
+			throw new IllegalArgumentException("Invalid phone number format");
+		
+		this.id = id;
 	    this.name = name;
 	    this.email = email;
 	    this.phoneNumber = phoneNumber;
