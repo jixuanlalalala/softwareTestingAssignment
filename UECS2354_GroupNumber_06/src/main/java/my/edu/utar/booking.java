@@ -96,7 +96,7 @@ public class booking {
     
     private void handleExistingUser(String userid) {
         
-        if (userid.trim().isEmpty() || userid.trim() == null) {
+        if (userid== null || userid.trim().isEmpty()) {
             throw new IllegalArgumentException("User ID cannot be empty");
         }
         
@@ -120,23 +120,23 @@ public class booking {
     
     private void handleNewUser(String userid, String name, String email, String phone) {
     	
-    	if(userid.trim().isEmpty() || userid.trim() == null)
-    		throw new IllegalArgumentException("userid is required");
-    	
-    	if(name.trim().isEmpty() || name.trim() == null)
-    		throw new IllegalArgumentException("name is required");
-    	
-    	if(email.trim().isEmpty() || email.trim() == null)
-    		throw new IllegalArgumentException("email is required");
-    	
-    	if(email.contains("@"))
-    		throw new IllegalArgumentException("email must contained @");
-    	
-    	if(phone.trim().isEmpty() || phone.trim() == null)
-    		throw new IllegalArgumentException("phone number is required");
-    	
-    	if(Integer.parseInt(phone.trim())<10 || Integer.parseInt(phone.trim())>12)
-    		throw new IllegalArgumentException("phone number must be in between 10 to 12");
+    	if(userid== null || userid.trim().isEmpty())
+			throw new IllegalArgumentException("id cannot be empty or null");
+		
+		if(name== null || name.trim().isEmpty())
+			throw new IllegalArgumentException("name cannot be empty or null");
+
+		if(email== null || email.trim().isEmpty())
+			throw new IllegalArgumentException("email cannot be empty or null");
+		
+		if(!email.matches("^[\\w.-]+@[\\w.-]+\\.\\w+$"))
+			throw new IllegalArgumentException("Invalid email format") ;
+		
+		if(phone== null || phone.trim().isEmpty())
+			throw new IllegalArgumentException("phoneNumber cannot be empty or null");
+		
+		if(!phone.matches("\\d{10,12}") )
+			throw new IllegalArgumentException("Invalid phone number format");
     	
     	User user = new User(userid, name, email, phone);
     	this.user = user;
@@ -148,20 +148,20 @@ public class booking {
     private void handleGuest(String name, String email, String phone) {
         
         // Validate inputs
-        if(name.trim().isEmpty() || name.trim() == null)
-        	throw new IllegalArgumentException("name is empty");
-    	
-    	if(email.trim().isEmpty() || email.trim() == null)
-    		throw new IllegalArgumentException("email is required");
-    	
-    	if(email.contains("@"))
-    		throw new IllegalArgumentException("email must contained @");
-    	
-    	if(phone.trim().isEmpty() || phone.trim() == null)
-    		throw new IllegalArgumentException("phone number is required");
-    	
-    	if(Integer.parseInt(phone.trim())<10 || Integer.parseInt(phone.trim())>12)
-    		throw new IllegalArgumentException("phone number must be in between 10 to 12");
+    	if(name== null || name.trim().isEmpty())
+			throw new IllegalArgumentException("name cannot be empty or null");
+
+		if(email== null || email.trim().isEmpty())
+			throw new IllegalArgumentException("email cannot be empty or null");
+		
+		if(!email.matches("^[\\w.-]+@[\\w.-]+\\.\\w+$"))
+			throw new IllegalArgumentException("Invalid email format") ;
+		
+		if(phone== null || phone.trim().isEmpty())
+			throw new IllegalArgumentException("phoneNumber cannot be empty or null");
+		
+		if(!phone.matches("\\d{10,12}") )
+			throw new IllegalArgumentException("Invalid phone number format");
     	
         
         this.guestName = name;
@@ -176,7 +176,7 @@ public class booking {
     	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
     	LocalDateTime travelTime = LocalDateTime.parse(DayTime, formatter);
 
-        if(DayTime.trim().isEmpty()|| DayTime.trim() == null)
+        if(DayTime == null|| DayTime.trim().isEmpty())
         	throw new IllegalArgumentException("Travel date and time cannot be null");
     	
     	if(travelTime.format(formatter) != null)
@@ -192,7 +192,7 @@ public class booking {
     public void setStartStation(String start) {
     	start = start.toUpperCase();
     	
-    	if(start.trim().isEmpty() || start.trim() == null)
+    	if(start == null || start.trim().isEmpty() )
     		throw new IllegalArgumentException("Start station is required");
     	
     	if(!FROM_STATIONS.contains(start.trim()))
@@ -204,7 +204,7 @@ public class booking {
     public void setEndStation(String end) {
         end = end.toUpperCase();
     	
-    	if(end.trim().isEmpty() || end.trim() == null)
+    	if(end == null || end.trim().isEmpty())
     		throw new IllegalArgumentException("End station is required");
     	
     	if(!TO_STATIONS.contains(end.trim()))
@@ -244,10 +244,10 @@ public class booking {
     // Payment method selection
     public void setPaymentMethod(String payment) {
         
-    	if(payment.trim().isEmpty() || payment.trim() == null)
+    	if(payment == null || payment.trim().isEmpty() )
     		throw new IllegalArgumentException("Empty payment method");
     	
-    	if(payment.trim()!="E-wallet" || payment.trim() != "Credit Card" || payment.trim() != "Online Banking")
+    	if(payment.trim() !="E-wallet" || payment.trim() != "Credit Card" || payment.trim() != "Online Banking")
     		throw new IllegalArgumentException("Invalid payment method");
     	
         
@@ -268,7 +268,7 @@ public class booking {
     //payment confirmation
     public void setPaymentStatus(String status) {
     	
-    	if(status.trim().isEmpty() || status.trim() == null)
+    	if(status == null || status.trim().isEmpty())
     		throw new IllegalArgumentException("status cannot be empty");
     	
     	if(!status.equals("Pending") && !status.equals("Completed"))
@@ -280,7 +280,7 @@ public class booking {
     // booking confirmation
     public void setBookingStatus(String status) {
         
-        if (status.trim().isEmpty() || status == null) 
+        if (status == null || status.trim().isEmpty()) 
             throw new IllegalArgumentException("status cannot be empty");
         
         if(!status.equals("Pending") && !status.equals("Completed"))
