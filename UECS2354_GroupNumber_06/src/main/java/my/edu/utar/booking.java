@@ -19,33 +19,29 @@ public class booking {
     private double totalFare;
     private String discountDetails;
     private double finalFare;
-    private String bookingStatus;
-    private String paymentStatus;
+    private String bookingStatus; //"completed" / "pending" 
+    private String paymentStatus; //"completed" / "pending" 
     
     // Utilities
-    private Scanner input = new Scanner(System.in);
     private FileUtilities fu = new FileUtilities();  
-    private AddNewUser anu = new AddNewUser(fu);
-    private AddGuest ag = new AddGuest();
-    private ReadUser ru = new ReadUser();
     
     // Station lists
     private static final List<String> FROM_STATIONS = Arrays.asList(
-        "KL Sentral", "Subang Jaya", "Bangsar", "Sentul Timur", "Titiwangsa",
-        "Ampang Park", "KLCC", "Masjid Jamek", "Bandaraya", "Batu Kentonmen",
-        "Rawang", "Sungai Buloh", "Serdang", "Kajang", "Gombak", 
-        "Taman Melati", "Wangsa Maju", "Setiawangsa"
+		"KL SENTRAL", "SUBANG JAYA", "BANGSAR", "SENTUL TIMUR", "TITIWANGSA",
+		"AMPANG PARK", "KLCC", "MASJID JAMEK", "BANDARAYA", "BATU KENTONMEN",
+		"RAWANG", "SUNGAI BULOH", "SERDANG", "KAJANG", "GOMBAK",
+		"TAMAN MELATI", "WANGSA MAJU", "SETIAWANGSA"
     );
     
     private static final List<String> TO_STATIONS = Arrays.asList(
-        "Mid Valley", "Subang Jaya", "Shah Alam", "KL Sentral", "Kepong Sentral",
-        "Titiwangsa", "Ampang Park", "KLCC", "Masjid Jamek", "Bandaraya",
-        "Batu Kentonmen", "Rawang", "Sungai Buloh", "Kajang", "Semenyih Sentral",
-        "Taman Melati", "Wangsa Maju", "Setiawangsa"
+		"MID VALLEY", "SUBANG JAYA", "SHAH ALAM", "KL SENTRAL", "KEPONG SENTRAL",
+		"TITIWANGSA", "AMPANG PARK", "KLCC", "MASJID JAMEK", "BANDARAYA",
+		"BATU KENTONMEN", "RAWANG", "SUNGAI BULOH", "KAJANG", "SEMENYIH SENTRAL",
+		"TAMAN MELATI", "WANGSA MAJU", "SETIAWANGSA"
     );
     
     private static final List<String> PASSENGER_TYPES = Arrays.asList(
-        "Adult", "Senior Citizen", "Child", "Student"
+    	"ADULT", "SENIOR CITIZEN", "CHILD", "STUDENT"
     );
     
     // Constructors
@@ -54,6 +50,7 @@ public class booking {
         this.paymentStatus = "Pending";
     }
     
+    //user constructor
     public booking(User user, LocalDateTime travelDayTime, String startStation, 
                    String endStation, Map<String, Integer> passengerTypes, String paymentMethod) {
         this.user = user;
@@ -83,37 +80,31 @@ public class booking {
     }
     
     // User selection methods
-    public void selectUser() {
-        System.out.println("Please select:");
-        System.out.println("1. Existing user");
-        System.out.println("2. Register as new user");
-        System.out.println("3. Proceed as guest");
-        System.out.print("Please enter 1 to 3: ");
-        
-        int choice = getValidIntegerInput(1, 3);
-        
-        switch(choice) {
-            case 1:
-                handleExistingUser();
+    public void setUser(String userType, String id, String name, String email, String phoneNumber) {
+        switch(userType) {
+            case "existing user":
+                handleExistingUser(id);
                 break;
-            case 2:
-                handleNewUser();
+            case "new user":
+                handleNewUser(id, name, email, phoneNumber);
                 break;
-            case 3:
-                handleGuest();
+            case "guest":
+                handleGuest(name, email, phoneNumber);
                 break;
         }
     }
     
-    private void handleExistingUser() {
-        System.out.println("\n\tEXISTING USER");
-        System.out.print("Please enter your userID: ");
-        String userid = input.nextLine().trim();
+    private void handleExistingUser(String userid) {
         
-        if (userid.isEmpty()) {
+        if (userid.trim().isEmpty() || userid.trim() == null) {
             throw new IllegalArgumentException("User ID cannot be empty");
         }
         
+        ReadUser ru = new ReadUser();
+        this.user = ru.readUser(userid, "user.txt");
+    }
+	
+        /*
         try {
         	// the filename will change later on
             this.user = ru.readUser(userid, "user.txt");
@@ -124,182 +115,219 @@ public class booking {
         } catch (Exception e) {
             throw new RuntimeException("Error reading user data: " + e.getMessage());
         }
+        */
+    
+    
+    private void handleNewUser(String userid, String name, String email, String phone) {
+    	
+    	if(userid.trim().isEmpty() || userid.trim() == null)
+    		throw new IllegalArgumentException("userid is required");
+    	
+    	if(name.trim().isEmpty() || name.trim() == null)
+    		throw new IllegalArgumentException("name is required");
+    	
+    	if(email.trim().isEmpty() || email.trim() == null)
+    		throw new IllegalArgumentException("email is required");
+    	
+    	if(email.contains("@"))
+    		throw new IllegalArgumentException("email must contained @");
+    	
+    	if(phone.trim().isEmpty() || phone.trim() == null)
+    		throw new IllegalArgumentException("phone number is required");
+    	
+    	if(Integer.parseInt(phone.trim())<10 || Integer.parseInt(phone.trim())>12)
+    		throw new IllegalArgumentException("phone number must be in between 10 to 12");
+    	
+    	User user = new User(userid, name, email, phone);
+    	this.user = user;
+        AddNewUser anu = new AddNewUser(fu);
+        anu.addUser(user, "user.txt");
+        
     }
     
-    private void handleNewUser() {
-        System.out.println("\n\tREGISTER AS NEW USER");
-        System.out.print("Please enter your ID: ");
-        String userid = input.nextLine().trim();
-        System.out.print("Please enter your name: ");
-        String name = input.nextLine().trim();
-        System.out.print("Please enter your email: ");
-        String email = input.nextLine().trim();
-        System.out.print("Please enter your phone number: ");
-        String phone = input.nextLine().trim();
+    private void handleGuest(String name, String email, String phone) {
         
         // Validate inputs
-        validateUserInput(userid, name, email, phone);
+        if(name.trim().isEmpty() || name.trim() == null)
+        	throw new IllegalArgumentException("name is empty");
+    	
+    	if(email.trim().isEmpty() || email.trim() == null)
+    		throw new IllegalArgumentException("email is required");
+    	
+    	if(email.contains("@"))
+    		throw new IllegalArgumentException("email must contained @");
+    	
+    	if(phone.trim().isEmpty() || phone.trim() == null)
+    		throw new IllegalArgumentException("phone number is required");
+    	
+    	if(Integer.parseInt(phone.trim())<10 || Integer.parseInt(phone.trim())>12)
+    		throw new IllegalArgumentException("phone number must be in between 10 to 12");
+    	
         
-        try {
-            this.user = new User(userid, name, email, phone);
-            anu.addUser(this.user, "user.txt");
-            System.out.println("User registered successfully!");
-        } catch (Exception e) {
-            throw new RuntimeException("Error creating new user: " + e.getMessage());
-        }
-    }
-    
-    private void handleGuest() {
-        System.out.println("\n\tPROCEED AS GUEST");
-        System.out.print("Please enter your name: ");
-        String name = input.nextLine().trim();
-        System.out.print("Please enter your email: ");
-        String email = input.nextLine().trim();
-        System.out.print("Please enter your phone number: ");
-        String phone = input.nextLine().trim();
-        
-        // Validate inputs
-        validateGuestInput(name, email, phone);
-        
-        try {
-            this.guestName = name;
-            this.guestEmail = email;
-            this.guestPhone = phone;
-            ag.addGuest(name, email, phone, "guest.txt");
-            System.out.println("Guest details saved successfully!");
-        } catch (Exception e) {
-            throw new RuntimeException("Error saving guest data: " + e.getMessage());
-        }
+        this.guestName = name;
+        this.guestEmail = email;
+        this.guestPhone = phone;
+        AddGuest ag = new AddGuest();
+        ag.addGuest(name, email, phone, "guest.txt");
     }
     
     // Travel date and time
-    public LocalDateTime setDayTime() {
-        System.out.print("Enter travel date (yyyy-MM-dd): ");
-        String date = input.nextLine().trim();
-        System.out.print("Enter travel time (HH:mm): ");
-        String time = input.nextLine().trim();
+    public void setDayTime(String DayTime) {
+    	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    	LocalDateTime travelTime = LocalDateTime.parse(DayTime, formatter);
+
+        if(DayTime.trim().isEmpty()|| DayTime.trim() == null)
+        	throw new IllegalArgumentException("Travel date and time cannot be null");
+    	
+    	if(travelTime.format(formatter) != null)
+    		throw new IllegalArgumentException("Date-time must be in format yyyy-MM-dd HH:mm");
         
-        String dateTime = date + " " + time;
+        if(travelTime.isBefore(LocalDateTime.now()))
+        	throw new IllegalArgumentException("Travel date and time cannot be in the past");
         
-        try {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-            LocalDateTime travelTime = LocalDateTime.parse(dateTime, formatter);
-            
-            // Validate that the date is not in the past
-            if (travelTime.isBefore(LocalDateTime.now())) {
-                throw new IllegalArgumentException("Travel date and time cannot be in the past");
-            }
-            
-            this.travelDayTime = travelTime;
-            return travelTime;
-        } catch (DateTimeParseException e) {
-            throw new IllegalArgumentException("Invalid date/time format. Please use yyyy-MM-dd HH:mm");
-        }
+        this.travelDayTime = travelTime;
     }
     
     // Station selection
-    public String setStartStation() {
-        System.out.println("\nAvailable start stations:");
-        for (int i = 0; i < FROM_STATIONS.size(); i++) {
-            System.out.println((i + 1) + ". " + FROM_STATIONS.get(i));
-        }
-        
-        System.out.print("Please select your start station (1-" + FROM_STATIONS.size() + "): ");
-        int choice = getValidIntegerInput(1, FROM_STATIONS.size());
-        
-        //retrieve the start station from the list
-        this.startStation = FROM_STATIONS.get(choice - 1);
-        return this.startStation;
+    public void setStartStation(String start) {
+    	start = start.toUpperCase();
+    	
+    	if(start.trim().isEmpty() || start.trim() == null)
+    		throw new IllegalArgumentException("Start station is required");
+    	
+    	if(!FROM_STATIONS.contains(start.trim()))
+    		throw new IllegalArgumentException("Start station is invalid");
+    	
+        this.startStation = start;
     }
     
-    public String setEndStation() {
-        System.out.println("\nAvailable end stations:");
-        List<String> validEndStations = new ArrayList<>();
+    public void setEndStation(String end) {
+        end = end.toUpperCase();
+    	
+    	if(end.trim().isEmpty() || end.trim() == null)
+    		throw new IllegalArgumentException("End station is required");
+    	
+    	if(!TO_STATIONS.contains(end.trim()))
+    		throw new IllegalArgumentException("End station is invalid");
+    	
+    	if(end != this.startStation) 
+    		throw new IllegalArgumentException("End station cannot be same with Start station");
         
-        for (String station : TO_STATIONS) {
-            if (!station.equals(this.startStation)) {
-                validEndStations.add(station);
-            }
-        }
-        
-        for (int i = 0; i < validEndStations.size(); i++) {
-            System.out.println((i + 1) + ". " + validEndStations.get(i));
-        }
-        
-        System.out.print("Please select your end station (1-" + validEndStations.size() + "): ");
-        int choice = getValidIntegerInput(1, validEndStations.size());
-        
-        this.endStation = validEndStations.get(choice - 1);
-        return this.endStation;
+        this.endStation = end;
     }
     
     // Passenger types and quantities
-    public Map<String, Integer> setPassengerTypeAndQty() {
-        System.out.println("\nPlease enter quantity for each passenger type:");
-        this.passengerTypes.clear();
+    public void setPassengerTypeAndQty(int[] qty) {
         
         int totalPassengers = 0;
+        int i = 0;
+        
+        if (qty == null || qty.length == 0 )
+        	throw new IllegalArgumentException("no passenger in the pruchase");
+        
+        for(int item: qty) {
+        	if(item < 0 || item> 50)
+        		throw new IllegalArgumentException("Invalid amount of tickets for each passenger types.");
+        }
+        
         for (String type : PASSENGER_TYPES) {
-            System.out.print(type + " (0 or more): ");
-            int qty = getValidIntegerInput(0, 50); // reasonable upper limit
-            this.passengerTypes.put(type, qty);
-            totalPassengers += qty;
+            this.passengerTypes.put(type, qty[i++]);
+            totalPassengers += qty[i];
         }
         
         if (totalPassengers == 0) {
             throw new IllegalArgumentException("At least one passenger is required");
         }
         
-        return new HashMap<>(this.passengerTypes);
     }
     
     // Payment method selection
-    public String setPaymentMethod() {
-        System.out.println("\nPayment methods:");
-        System.out.println("1. E-wallet");
-        System.out.println("2. Credit Card");
-        System.out.println("3. Online Banking");
-        System.out.print("Please enter payment method (1-3): ");
+    public void setPaymentMethod(String payment) {
         
-        int choice = getValidIntegerInput(1, 3);
+    	if(payment.trim().isEmpty() || payment.trim() == null)
+    		throw new IllegalArgumentException("Empty payment method");
+    	
+    	if(payment.trim()!="E-wallet" || payment.trim() != "Credit Card" || payment.trim() != "Online Banking")
+    		throw new IllegalArgumentException("Invalid payment method");
+    	
         
-        switch(choice) {
-            case 1: 
+        switch(payment) {
+            case "E-wallet": 
                 this.paymentMethod = "E-wallet";
                 break;
-            case 2:
+            case "Credit Card":
                 this.paymentMethod = "Credit Card";
                 break;
-            case 3: 
+            case "Online Banking": 
                 this.paymentMethod = "Online Banking";
                 break;
         }
-        return this.paymentMethod;
+        setPaymentStatus("Completed");
+    }
+    
+    //payment confirmation
+    public void setPaymentStatus(String status) {
+    	
+    	if(status.trim().isEmpty() || status.trim() == null)
+    		throw new IllegalArgumentException("status cannot be empty");
+    	
+    	if(!status.equals("Pending") && !status.equals("Completed"))
+    		throw new IllegalArgumentException("Invalid status");
+    	
+    	this.paymentStatus = status;
     }
     
     // booking confirmation
-    public void setBookingStatus() {
-        System.out.print("Do you confirm to make this booking? (Y/N): ");
-        String choice = input.nextLine().trim().toUpperCase();
+    public void setBookingStatus(String status) {
         
-        if (choice.equals("Y") || choice.equals("YES")) {
-            this.bookingStatus = "Confirmed";
-        } else {
-            this.bookingStatus = "Cancelled";
-        }
+        if (status.trim().isEmpty() || status == null) 
+            throw new IllegalArgumentException("status cannot be empty");
+        
+        if(!status.equals("Pending") && !status.equals("Completed"))
+        	throw new IllegalArgumentException("Invalid status");
+        
+        this.bookingStatus = status;
     }
     
-    // Get payment status
+    //total fare
+    public double getTotalFare() {
+    	routeInfo ri = new routeInfo();
+    	ri.setDistance(this.startStation, this.endStation);
+    	double distance = ri.getDistance();
+    	
+    	calculateFare cf = new calculateFare();
+    	this.totalFare = cf.calTotalFare(this.passengerTypes, this.travelDayTime, this.startStation, this.endStation);
+    	
+    	return this.totalFare;
+    }
+    
+    //show fare after discount
+    public double getFareDiscount() {
+    	paymentMethodAdjustment pma = new paymentMethodAdjustment();
+    	pma.applyPaymentDiscount(this.paymentMethod, this.totalFare);
+    	
+    	return this.totalFare;
+    }
+    
+    //show the curremt BookingStatus
+    public String getBookingStatus() {
+    	return this.bookingStatus;
+    }
+    
+    //show the current paymentStatus
     public String getPaymentStatus() {
-		return paymentStatus;
-	}
-
-    // Set payment status
-	public void setPaymentStatus(String paymentStatus) {
-		this.paymentStatus = paymentStatus;
-	}
-
-	// Process complete booking
+    	return this.paymentStatus;
+    }
+    
+    // Process payment
+    public boolean confirmAndPay() {
+    	payment py = new payment();
+    	return py.processPayment(paymentMethod);
+    }
+    
+    
+    /*
+    // Process complete booking
     public void processBooking() {
         try {
             // Get route info and calculate fare
@@ -334,6 +362,8 @@ public class booking {
         }
     }
     
+    /*
+    
     // Display booking summary
     public void displayBookingSummary() {
         System.out.println("\n" + "=".repeat(50));
@@ -355,12 +385,6 @@ public class booking {
         System.out.println("=".repeat(50));
     }
     
-    // Process payment
-    public boolean confirmAndPay() {
-    	payment py = new payment();
-    	return py.processPayment(paymentMethod);
-    }
-    
     // Utility methods
     private int getValidIntegerInput(int min, int max) {
         while (true) {
@@ -376,6 +400,7 @@ public class booking {
             }
         }
     }
+    /*
     
     private void validateUserInput(String userid, String name, String email, String phone) {
         if (userid.isEmpty() || name.isEmpty() || email.isEmpty() || phone.isEmpty()) {
@@ -394,7 +419,6 @@ public class booking {
             throw new IllegalArgumentException("Invalid email format");
         }
     }
-    
     
     
     // Main method for testing
@@ -423,4 +447,5 @@ public class booking {
             e.printStackTrace();
         }
     }
+    */
 }
