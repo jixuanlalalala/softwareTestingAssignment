@@ -5,7 +5,7 @@ public class paymentMethodAdjustment {
 	
 	public double applyPaymentDiscount(String paymentType, double fare) {
 
-		if (paymentType.equals("E-Wallet")){
+		if (paymentType.equals("E-wallet")){
 			return fare;
 		}
 		else if (paymentType.equals("Credit Card")) {

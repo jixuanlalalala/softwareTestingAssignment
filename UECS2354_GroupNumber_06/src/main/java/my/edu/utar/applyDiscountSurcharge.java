@@ -10,13 +10,13 @@ public class applyDiscountSurcharge {
 			throw new IllegalArgumentException("Distance cannot be negative");
 		}
 		
-		if (passengerType.equals("Adult")) {
+		if (passengerType.equalsIgnoreCase("Adult")) {
 			return 1.0;
-		} else if (passengerType.equals("Senior Citizen")) {
+		} else if (passengerType.equalsIgnoreCase("Senior Citizen")) {
 			return 0.5;
-		} else if (passengerType.equals("Student")) {
+		} else if (passengerType.equalsIgnoreCase("Student")) {
 			return 0.7;
-		} else if (passengerType.equals("Child")) {
+		} else if (passengerType.equalsIgnoreCase("Child")) {
 			if (distance < 5) {
 				return 0;
 			} else {

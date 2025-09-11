@@ -49,13 +49,13 @@ public class routeInfo{
 	        String to = routes[i][1];
 	        
 	        //forward direction
-	        if(from.equals(start) && to.equals(end)) {
+	        if(from.equalsIgnoreCase(start) && to.equalsIgnoreCase(end)) {
 	        	distance = distances[i];
 	        	return;
 	        }
 			
 			//reverse direction
-			else if(from.equals(end) && to.equals(start)) {
+			else if(from.equalsIgnoreCase(end) && to.equalsIgnoreCase(start)) {
 				distance = distances[i];
 				return;
 			}

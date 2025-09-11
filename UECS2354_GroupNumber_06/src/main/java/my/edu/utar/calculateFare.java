@@ -53,8 +53,8 @@ public class calculateFare {
 	        String passengerType = entry.getKey();
 	        int qtt = entry.getValue();
 
-	        if (qtt <= 0) {
-	            throw new IllegalArgumentException("Quantity cannot be zero or negative for passenger type: " + passengerType);
+	        if (qtt < 0) {
+	            throw new IllegalArgumentException("Quantity cannot negative for passenger type: " + passengerType);
 	        }
 
 	        double totalDiscount = aps.getTotalDiscount(passengerType, distance, time);

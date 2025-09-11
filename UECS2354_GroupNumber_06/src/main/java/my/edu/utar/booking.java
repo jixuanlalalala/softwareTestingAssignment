@@ -101,7 +101,7 @@ public class booking {
         }
         
         ReadUser ru = new ReadUser();
-        this.user = ru.readUser(userid, "user.txt");
+        this.user = ru.readUser(userid, "test_user.txt");
     }
 	
         /*
@@ -171,15 +171,21 @@ public class booking {
         ag.addGuest(name, email, phone, "guest.txt");
     }
     
-    // Travel date and time
+    //to get the user
+    public User getUser() {
+		return user;
+	}
+
+
+	// Travel date and time
     public void setDayTime(String DayTime) {
-    	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
     	LocalDateTime travelTime = LocalDateTime.parse(DayTime, formatter);
 
         if(DayTime == null|| DayTime.trim().isEmpty())
         	throw new IllegalArgumentException("Travel date and time cannot be null");
     	
-    	if(travelTime.format(formatter) != null)
+    	if(travelTime.format(formatter) == null)
     		throw new IllegalArgumentException("Date-time must be in format yyyy-MM-dd HH:mm");
         
         if(travelTime.isBefore(LocalDateTime.now()))
@@ -210,7 +216,7 @@ public class booking {
     	if(!TO_STATIONS.contains(end.trim()))
     		throw new IllegalArgumentException("End station is invalid");
     	
-    	if(end != this.startStation) 
+    	if(end == this.startStation) 
     		throw new IllegalArgumentException("End station cannot be same with Start station");
         
         this.endStation = end;
@@ -231,8 +237,8 @@ public class booking {
         }
         
         for (String type : PASSENGER_TYPES) {
-            this.passengerTypes.put(type, qty[i++]);
-            totalPassengers += qty[i];
+            this.passengerTypes.put(type, qty[i]);
+            totalPassengers += qty[i++];
         }
         
         if (totalPassengers == 0) {
@@ -247,7 +253,7 @@ public class booking {
     	if(payment == null || payment.trim().isEmpty() )
     		throw new IllegalArgumentException("Empty payment method");
     	
-    	if(payment.trim() !="E-wallet" || payment.trim() != "Credit Card" || payment.trim() != "Online Banking")
+    	if(payment.trim() !="E-wallet" && payment.trim() != "Credit Card" && payment.trim() != "Online Banking")
     		throw new IllegalArgumentException("Invalid payment method");
     	
         
@@ -291,9 +297,9 @@ public class booking {
     
     //total fare
     public double getTotalFare() {
-    	routeInfo ri = new routeInfo();
-    	ri.setDistance(this.startStation, this.endStation);
-    	double distance = ri.getDistance();
+    	//routeInfo ri = new routeInfo();
+    	//ri.setDistance(this.startStation, this.endStation);
+    	//double distance = ri.getDistance();
     	
     	calculateFare cf = new calculateFare();
     	this.totalFare = cf.calTotalFare(this.passengerTypes, this.travelDayTime, this.startStation, this.endStation);
@@ -323,6 +329,12 @@ public class booking {
     public boolean confirmAndPay() {
     	payment py = new payment();
     	return py.processPayment(paymentMethod);
+    }
+    
+    // Print receipt
+    public boolean printReceipt() {
+    	emailReceipt er = new emailReceipt();
+    	return er.printEmailReceipt();
     }
     
     
