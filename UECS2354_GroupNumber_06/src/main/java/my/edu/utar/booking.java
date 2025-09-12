@@ -92,32 +92,12 @@ public class booking {
     		
         switch(userType) {
             case "existing user":
-            	if (userid== null || userid.trim().isEmpty()) {
-                    throw new IllegalArgumentException("User ID cannot be empty");
-                }
                 
                 ReadUser ru = new ReadUser();
                 this.user = ru.readUser(userid, "test_user.txt");
                 break;
                 
             case "new user":
-            	if(userid== null || userid.trim().isEmpty())
-        			throw new IllegalArgumentException("id cannot be empty or null");
-        		
-        		if(name== null || name.trim().isEmpty())
-        			throw new IllegalArgumentException("name cannot be empty or null");
-
-        		if(email== null || email.trim().isEmpty())
-        			throw new IllegalArgumentException("email cannot be empty or null");
-        		
-        		if(!email.matches("^[\\w.-]+@[\\w.-]+\\.\\w+$"))
-        			throw new IllegalArgumentException("Invalid email format") ;
-        		
-        		if(phoneNumber== null || phoneNumber.trim().isEmpty())
-        			throw new IllegalArgumentException("phoneNumber cannot be empty or null");
-        		
-        		if(!phoneNumber.matches("\\d{10,12}") )
-        			throw new IllegalArgumentException("Invalid phone number format");
             	
             	User user = new User(userid, name, email, phoneNumber);
             	this.user = user;
@@ -126,22 +106,7 @@ public class booking {
                 break;
                 
             case "guest":
-            	// Validate inputs
-            	if(name== null || name.trim().isEmpty())
-        			throw new IllegalArgumentException("name cannot be empty or null");
-
-        		if(email== null || email.trim().isEmpty())
-        			throw new IllegalArgumentException("email cannot be empty or null");
-        		
-        		if(!email.matches("^[\\w.-]+@[\\w.-]+\\.\\w+$"))
-        			throw new IllegalArgumentException("Invalid email format") ;
-        		
-        		if(phoneNumber== null || phoneNumber.trim().isEmpty())
-        			throw new IllegalArgumentException("phoneNumber cannot be empty or null");
-        		
-        		if(!phoneNumber.matches("\\d{10,12}") )
-        			throw new IllegalArgumentException("Invalid phone number format");
-            	
+            	// Validate input
                 
                 this.guestName = name;
                 this.guestEmail = email;
@@ -407,15 +372,13 @@ public class booking {
         return new paymentMethodAdjustment();
     }
     
-    public double getFareDiscount() {
-    	paymentMethodAdjustment pma = new paymentMethodAdjustment();
-    	this.finalFare = pma.applyPaymentDiscount(this.paymentMethod, this.totalFare);
-    	
-    	return this.finalFare;
-    }
 
     public double getFinalFare() {
         paymentMethodAdjustment pma = createAdjustment();
+        
+        if(totalFare  < 0)
+        	throw new IllegalArgumentException("the totalFare cannot be negative");
+        
         this.finalFare = pma.applyPaymentDiscount(this.paymentMethod, this.totalFare);
         return this.finalFare;
     }

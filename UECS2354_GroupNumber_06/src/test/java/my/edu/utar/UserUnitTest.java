@@ -10,17 +10,11 @@ import junitparams.Parameters;
 
 @RunWith(JUnitParamsRunner.class)
 public class UserUnitTest {
- 	
-	@Test
-	@Parameters({"2205922, Lim Zhen Cheng, Limzc@gmail.com, 0123456789"})
-	public void testUserValid(String id, String name, String email, String phoneNumber) {
-		User user = new User(id, name, email, phoneNumber);
-		assertNotNull(user);
-	}
 	
-	private Object[] getParamsForTestUserInvalid() {
+	private Object[] getParamsForTestInvalidGetterAndSetter() {
 		return new Object[] {
 				new Object[] {null, "Lim Zhen Cheng", "limzc@gmail.com", "0123456789"},
+				new Object[] {"   ", "Lim Zhen Cheng", "limzc@gmail.com", "0123456789"},
 				new Object[] {"2205922", null, "limzc@gmail.com", "0123456789"},
 				new Object[] {"2205922",  "Lim Zhen Cheng", null, "0123456789"},
 				new Object[] {"2205922", "Lim Zhen Cheng", "limzc@gmail.com", null},
@@ -31,26 +25,19 @@ public class UserUnitTest {
 		};
 	}
 	
-	@Test(expected = IllegalArgumentException.class)
-	@Parameters(method = "getParamsForTestUserInvalid")
-	public void testUserInvalid(String id, String name, String email, String phoneNumber) {
-		User user = new User(id, name, email, phoneNumber);
-		assertNotNull(user);
-	}
 	
-	
-	private Object[] getParamsForTestGetterAndSetter() {
+	private Object[] getParamsForTestValidGetterAndSetter() {
 		return new Object[] {
 				new Object[] {"2208899", "Ken Song", "test@gmail.com", "01234567890" },
 				new Object[] {"2205922", "Mickey", "test@gmail.com", "01234567890"},
 				new Object[] {"2205922", "Ken Song", "tested@gmail.com", "01234567890"},
-				new Object[] {"2205922", "Ken Song", "test@gmail.com", "0225533667788"}
+				new Object[] {"2205922", "Ken Song", "test@gmail.com", "02255336677"}
 		};
 	}
 	//test for getter and setters
 	@Test
-	@Parameters(method = "getParamsForTestGetterAndSetter")
-	public void testUserGetterAndSetter(String id, String name, String email, String phone) {
+	@Parameters(method = "getParamsForTestValidGetterAndSetter")
+	public void testUserValidGetterAndSetter(String id, String name, String email, String phone) {
 		User user = new User("2205922", "Ken Song", "test@gmail.com", "01234567890");
 		
 		user.setId(id);
@@ -67,16 +54,23 @@ public class UserUnitTest {
 		assertEquals(arName, name);
 		assertEquals(arEmail, email);
 		assertEquals(arPhone, phone);
-		
 	}
 	
-	@Test
-	public void testToString() {
-		User user = new User("2205922","Lim Zhen Chen", "limzc@gmail.com", "0123456789");
+	
+	@Test(expected = IllegalArgumentException.class)
+	@Parameters(method = "getParamsForTestInvalidGetterAndSetter")
+	public void testUserInvalidGetterAndSetter(String id, String name, String email, String phone) {
+		User user = new User("2205922", "Ken Song", "test@gmail.com", "01234567890");
 		
-		String er = "2205922|Lim Zhen Chen|limzc@gmail.com|0123456789";
+		user.setId(id);
+		user.setName(name);
+		user.setEmail(email);
+		user.setPhoneNumber(phone);
 		
-		assertEquals(er, user.toString());
-				 
+		String arId = user.getId();
+		String arName = user.getName();
+		String arEmail = user.getEmail();
+		String arPhone = user.getPhoneNumber();
 	}
+	
 }

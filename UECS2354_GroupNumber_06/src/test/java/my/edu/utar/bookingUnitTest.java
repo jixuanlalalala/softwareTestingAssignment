@@ -183,7 +183,6 @@ public class bookingUnitTest {
 		bk.setPaymentStatus(status);
 	}
 	
-	//need to recheck
 	private Object[] paramsForValidTotalFare() {
 	    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
 
@@ -238,7 +237,6 @@ public class bookingUnitTest {
 		assertEquals(totalFare, er, 0.01);
 	}
 	
-	//undone( same)
 	private Object[] paramsForValidFinalFare() {
 	    return new Object[] {
 	        new Object[] { "E-Wallet", 4.0, 4.0 },
@@ -270,6 +268,17 @@ public class bookingUnitTest {
 	    verify(pmaMock).applyPaymentDiscount(paymentMethod, totalFare);
 	}
 
+	@Test(expected = IllegalArgumentException.class)
+	@Parameters({"E-wallet, -1"})
+	public void testInvalidFinalFare (String paymentMethod , double totalFare) {
+		booking bkSpy  = new booking();
+		
+		bkSpy.setPaymentMethod(paymentMethod);
+		bkSpy.setTotalFare(totalFare);
+		
+		bkSpy.getFinalFare();
+	}
+	
 	
 	private Object[] paramsValidDiscountDetails() {
 		return new Object[] {

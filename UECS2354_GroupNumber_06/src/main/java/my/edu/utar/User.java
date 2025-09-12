@@ -7,23 +7,11 @@ public class User {
 	private String phoneNumber;
 	
 	public User(String id, String name, String email, String phoneNumber) {
-		if(id== null || id.trim().isEmpty())
-			throw new IllegalArgumentException("id cannot be empty or null");
-		
-		if(name== null || name.trim().isEmpty())
-			throw new IllegalArgumentException("name cannot be empty or null");
 
-		if(email== null || email.trim().isEmpty())
-			throw new IllegalArgumentException("email cannot be empty or null");
 		
-		if(!email.matches("^[\\w.-]+@[\\w.-]+\\.\\w+$"))
-			throw new IllegalArgumentException("Invalid email format") ;
-		
-		if(phoneNumber== null || phoneNumber.trim().isEmpty())
-			throw new IllegalArgumentException("phoneNumber cannot be empty or null");
-		
-		if(!phoneNumber.matches("\\d{10,12}") )
-			throw new IllegalArgumentException("Invalid phone number format");
+
+
+
 		
 		this.id = id;
 	    this.name = name;
@@ -35,14 +23,21 @@ public class User {
     }
 	
 	public String getName() {
+		
 		return name;
 	}
 	public void setName(String name) {
+		if(name== null || name.trim().isEmpty())
+			throw new IllegalArgumentException("name cannot be empty or null");
+		
 		this.name = name;
 	}
 	
 	
 	public String getId() {
+		if(id== null || id.trim().isEmpty())
+			throw new IllegalArgumentException("id cannot be empty or null");
+		
 		return id;
 	}
 	public void setId(String id) {
@@ -54,6 +49,12 @@ public class User {
 		return email;
 	}
 	public void setEmail(String email) {
+		if(email== null || email.trim().isEmpty())
+			throw new IllegalArgumentException("email cannot be empty or null");
+		
+		if(!email.matches("^[\\w.-]+@[\\w.-]+\\.\\w+$"))
+			throw new IllegalArgumentException("Invalid email format") ;
+		
 		this.email = email;
 	}
     
@@ -62,6 +63,12 @@ public class User {
 		return phoneNumber;
 	}
 	public void setPhoneNumber(String phoneNumber) {
+		if(phoneNumber== null || phoneNumber.trim().isEmpty())
+			throw new IllegalArgumentException("phoneNumber cannot be empty or null");
+		
+		if(!phoneNumber.matches("\\d{10,12}") )
+			throw new IllegalArgumentException("Invalid phone number format");
+		
 		this.phoneNumber = phoneNumber;
 	}
     
