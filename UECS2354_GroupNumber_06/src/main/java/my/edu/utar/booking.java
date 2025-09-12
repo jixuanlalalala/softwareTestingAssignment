@@ -17,7 +17,7 @@ public class booking {
     private String paymentMethod;
     
     private double totalFare;
-    private String discountDetails;
+    private double discountSurchargeDetails; //if finalFare > totalFare, surcharge ; if totalFare>finalfare , discount
     private double finalFare;
     private String bookingStatus; //"completed" / "pending" 
     private String paymentStatus; //"completed" / "pending" 
@@ -43,6 +43,9 @@ public class booking {
     private static final List<String> PASSENGER_TYPES = Arrays.asList(
     	"ADULT", "SENIOR CITIZEN", "CHILD", "STUDENT"
     );
+    
+    private static final List<String> DISCOUNTSURCHARGE_DETAILS = Arrays.asList(
+    		"Passenger Type Discount","Time Date Discount", "Flat Surcharge");
     
     // Constructors
     public booking() {
@@ -80,28 +83,79 @@ public class booking {
     }
     
     // User selection methods
-    public void setUser(String userType, String id, String name, String email, String phoneNumber) {
+    public void setUser(String userType, String userid, String name, String email, String phoneNumber) {
+    	if(userType == null || userType.trim().isEmpty())
+    		throw new IllegalArgumentException("userType cannot be empty");
+    	
+    	if(!userType.equals("existing user") && !userType.equals("new user") && !userType.equals("guest") )
+    		throw new IllegalArgumentException("Invalid userType");
+    		
         switch(userType) {
             case "existing user":
-                handleExistingUser(id);
+            	if (userid== null || userid.trim().isEmpty()) {
+                    throw new IllegalArgumentException("User ID cannot be empty");
+                }
+                
+                ReadUser ru = new ReadUser();
+                this.user = ru.readUser(userid, "test_user.txt");
                 break;
+                
             case "new user":
-                handleNewUser(id, name, email, phoneNumber);
+            	if(userid== null || userid.trim().isEmpty())
+        			throw new IllegalArgumentException("id cannot be empty or null");
+        		
+        		if(name== null || name.trim().isEmpty())
+        			throw new IllegalArgumentException("name cannot be empty or null");
+
+        		if(email== null || email.trim().isEmpty())
+        			throw new IllegalArgumentException("email cannot be empty or null");
+        		
+        		if(!email.matches("^[\\w.-]+@[\\w.-]+\\.\\w+$"))
+        			throw new IllegalArgumentException("Invalid email format") ;
+        		
+        		if(phoneNumber== null || phoneNumber.trim().isEmpty())
+        			throw new IllegalArgumentException("phoneNumber cannot be empty or null");
+        		
+        		if(!phoneNumber.matches("\\d{10,12}") )
+        			throw new IllegalArgumentException("Invalid phone number format");
+            	
+            	User user = new User(userid, name, email, phoneNumber);
+            	this.user = user;
+                AddNewUser anu = new AddNewUser(fu);
+                anu.addUser(user, "test_user.txt");
                 break;
+                
             case "guest":
-                handleGuest(name, email, phoneNumber);
+            	// Validate inputs
+            	if(name== null || name.trim().isEmpty())
+        			throw new IllegalArgumentException("name cannot be empty or null");
+
+        		if(email== null || email.trim().isEmpty())
+        			throw new IllegalArgumentException("email cannot be empty or null");
+        		
+        		if(!email.matches("^[\\w.-]+@[\\w.-]+\\.\\w+$"))
+        			throw new IllegalArgumentException("Invalid email format") ;
+        		
+        		if(phoneNumber== null || phoneNumber.trim().isEmpty())
+        			throw new IllegalArgumentException("phoneNumber cannot be empty or null");
+        		
+        		if(!phoneNumber.matches("\\d{10,12}") )
+        			throw new IllegalArgumentException("Invalid phone number format");
+            	
+                
+                this.guestName = name;
+                this.guestEmail = email;
+                this.guestPhone = phoneNumber;
+                AddGuest ag = new AddGuest();
+                ag.addGuest(name, email, phoneNumber, "test_guest.txt");
+
                 break;
         }
     }
-    
+    /*
     private void handleExistingUser(String userid) {
         
-        if (userid== null || userid.trim().isEmpty()) {
-            throw new IllegalArgumentException("User ID cannot be empty");
-        }
         
-        ReadUser ru = new ReadUser();
-        this.user = ru.readUser(userid, "test_user.txt");
     }
 	
         /*
@@ -117,34 +171,12 @@ public class booking {
         }
         */
     
-    
+    /*
     private void handleNewUser(String userid, String name, String email, String phone) {
-    	
-    	if(userid== null || userid.trim().isEmpty())
-			throw new IllegalArgumentException("id cannot be empty or null");
-		
-		if(name== null || name.trim().isEmpty())
-			throw new IllegalArgumentException("name cannot be empty or null");
 
-		if(email== null || email.trim().isEmpty())
-			throw new IllegalArgumentException("email cannot be empty or null");
-		
-		if(!email.matches("^[\\w.-]+@[\\w.-]+\\.\\w+$"))
-			throw new IllegalArgumentException("Invalid email format") ;
-		
-		if(phone== null || phone.trim().isEmpty())
-			throw new IllegalArgumentException("phoneNumber cannot be empty or null");
-		
-		if(!phone.matches("\\d{10,12}") )
-			throw new IllegalArgumentException("Invalid phone number format");
-    	
-    	User user = new User(userid, name, email, phone);
-    	this.user = user;
-        AddNewUser anu = new AddNewUser(fu);
-        anu.addUser(user, "user.txt");
         
     }
-    
+    /*
     private void handleGuest(String name, String email, String phone) {
         
         // Validate inputs
@@ -170,29 +202,38 @@ public class booking {
         AddGuest ag = new AddGuest();
         ag.addGuest(name, email, phone, "guest.txt");
     }
+    */
     
     //to get the user
     public User getUser() {
 		return user;
 	}
+    
+    public String getGuest() {
+    	return guestName + "|" + guestEmail + "|" + guestPhone;
+    }
 
 
 	// Travel date and time
     public void setDayTime(String DayTime) {
-    	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
-    	LocalDateTime travelTime = LocalDateTime.parse(DayTime, formatter);
+    	if (DayTime == null || DayTime.trim().isEmpty())
+    	    throw new IllegalArgumentException("Travel date and time cannot be null");
 
-        if(DayTime == null|| DayTime.trim().isEmpty())
-        	throw new IllegalArgumentException("Travel date and time cannot be null");
-    	
-    	if(travelTime.format(formatter) == null)
-    		throw new IllegalArgumentException("Date-time must be in format yyyy-MM-dd HH:mm");
-        
+    	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+    	LocalDateTime travelTime;
+    	try {
+    	    travelTime = LocalDateTime.parse(DayTime, formatter);
+    	} catch (DateTimeParseException e) {
+    	    throw new IllegalArgumentException("Date-time must be in format yyyy-MM-dd'T'HH:mm");
+    	}
+
         if(travelTime.isBefore(LocalDateTime.now()))
         	throw new IllegalArgumentException("Travel date and time cannot be in the past");
         
         this.travelDayTime = travelTime;
     }
+    
+    public LocalDateTime getDayTime() {return travelDayTime;}
     
     // Station selection
     public void setStartStation(String start) {
@@ -205,6 +246,10 @@ public class booking {
     		throw new IllegalArgumentException("Start station is invalid");
     	
         this.startStation = start;
+    }
+    
+    public String getStartStation() {
+    	return startStation;
     }
     
     public void setEndStation(String end) {
@@ -220,6 +265,10 @@ public class booking {
     		throw new IllegalArgumentException("End station cannot be same with Start station");
         
         this.endStation = end;
+    }
+    
+    public String getEndStation() {
+    	return endStation;
     }
     
     // Passenger types and quantities
@@ -247,29 +296,34 @@ public class booking {
         
     }
     
+    public Map<String, Integer> getPassengerAndQty(){return passengerTypes;}
+    
     // Payment method selection
     public void setPaymentMethod(String payment) {
         
     	if(payment == null || payment.trim().isEmpty() )
     		throw new IllegalArgumentException("Empty payment method");
+    
+		payment = payment.trim().toUpperCase();
     	
-    	if(payment.trim() !="E-wallet" && payment.trim() != "Credit Card" && payment.trim() != "Online Banking")
+    	if(!payment.equals("E-WALLET") && !payment.equals( "CREDIT CARD") && !payment.equals("ONLINE BANKING"))
     		throw new IllegalArgumentException("Invalid payment method");
     	
         
         switch(payment) {
-            case "E-wallet": 
-                this.paymentMethod = "E-wallet";
+            case "E-WALLET": 
+                this.paymentMethod = "E-Wallet";
                 break;
-            case "Credit Card":
+            case "CREDIT CARD":
                 this.paymentMethod = "Credit Card";
                 break;
-            case "Online Banking": 
+            case "ONLINE BANKING": 
                 this.paymentMethod = "Online Banking";
                 break;
         }
-        setPaymentStatus("Completed");
     }
+    
+    public String getPaymentMethod() {return paymentMethod;}
     
     //payment confirmation
     public void setPaymentStatus(String status) {
@@ -295,27 +349,54 @@ public class booking {
         this.bookingStatus = status;
     }
     
-    //total fare
-    public double getTotalFare() {
-    	//routeInfo ri = new routeInfo();
-    	//ri.setDistance(this.startStation, this.endStation);
-    	//double distance = ri.getDistance();
-    	
-    	calculateFare cf = new calculateFare();
-    	this.totalFare = cf.calTotalFare(this.passengerTypes, this.travelDayTime, this.startStation, this.endStation);
-    	
-    	return this.totalFare;
+    protected calculateFare createFareCalculator() {
+        return new calculateFare();
     }
+    
+    //total fare
+	public double getTotalFare() {
+	    calculateFare cf = createFareCalculator() ;
+	    this.totalFare = cf.calTotalFare(this.passengerTypes, this.travelDayTime, this.startStation, this.endStation);
+	    return this.totalFare;
+	}
+    
+    //show the discount details
+    public double getDiscountDetails() {
+    	
+    	if(finalFare <0 || totalFare < 0)
+    		throw new IllegalArgumentException("The fare shoukld not be negative");
+    	
+    	if(finalFare > totalFare)
+    		return finalFare - totalFare;
+    	else if(totalFare> finalFare)
+    		return totalFare - finalFare;
+    	else
+    		return 0;
+    }
+    
     
     //show fare after discount
-    public double getFareDiscount() {
-    	paymentMethodAdjustment pma = new paymentMethodAdjustment();
-    	pma.applyPaymentDiscount(this.paymentMethod, this.totalFare);
-    	
-    	return this.totalFare;
+    protected paymentMethodAdjustment createAdjustment() {
+        return new paymentMethodAdjustment();
     }
+
+    public double getFinalFare() {
+        paymentMethodAdjustment pma = createAdjustment();
+        this.finalFare = pma.applyPaymentDiscount(this.paymentMethod, this.totalFare);
+        return this.finalFare;
+    }
+
     
-    //show the curremt BookingStatus
+    public void setFinalFare(double finalFare) {
+        this.finalFare = finalFare;
+    }
+
+    public void setTotalFare(double totalFare) {
+        this.totalFare = totalFare;
+    }
+
+    
+    //show the current BookingStatus
     public String getBookingStatus() {
     	return this.bookingStatus;
     }
@@ -328,6 +409,14 @@ public class booking {
     // Process payment
     public boolean confirmAndPay() {
     	payment py = new payment();
+    	this.setPaymentStatus("Completed");
+    	
+    	if(paymentMethod == null || paymentMethod.trim().isEmpty())
+    		throw new IllegalArgumentException("payment Method is empty");
+    	
+    	if(!paymentMethod.equals("E-Wallet") && !paymentMethod.equals("Credit Card") && !paymentMethod.equals("Online Banking"))
+    		throw new IllegalArgumentException("Invalid payment method");
+    	
     	return py.processPayment(paymentMethod);
     }
     
