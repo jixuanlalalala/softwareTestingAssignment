@@ -15,24 +15,38 @@ import org.junit.Ignore;
 
 public class IntegrationTesting1 {
 
-	
+	private Object[] getDataToTestUser() {
+
+		return new Object[] {
+				// existing user, 2 adults, from Bangsar to KL Sentral, using E-wallet
+				new Object[] { "existing user", "1", "", "", "", "John", "2025-09-30T06:45", 
+						"Bangsar", "KL Sentral", new int[] { 2, 0, 0, 0 }, "E-wallet", 4.8, 4.8 },
+				
+				// new user, 3 senior citizens, from Bangsar to KL Sentral, using Credit Card
+				new Object[] { "new user", "2", "Jane", "jj@jj.cc", "01234567890", "Jane", "2025-09-30T06:45",
+						"Bangsar", "KL Sentral", new int[] { 0, 3, 0, 0 }, "Credit Card", 3.6, 3.78 } 
+		};
+	}
+
 	@Test
-	public void testExistingUserCreateBooking() {
-		
+	@Parameters(method = "getDataToTestUser")
+	public void testExistingUserCreateBooking(String userType, String id, String name, String email, String phoneNumber,
+			String expectedName, String DayTime, String start, String end, int[] qty, String payment,
+			double expectedTotalFare, double expectedFareAfterPaymentDiscount) {
+
 		booking bk = new booking();
-		
-		bk.setUser("existing user","1","","","");
+
+		bk.setUser(userType, id, name, email, phoneNumber);
 		String actualUserName = bk.getUser().getName();
-		//testing get data from readUser.java
-		assertEquals("John", actualUserName); 
-		
-		
-		bk.setDayTime("2025-09-12T06:45");
-		bk.setStartStation("Bangsar");
-		bk.setEndStation("KL Sentral");
-		bk.setPassengerTypeAndQty(new int[] {2,0,0,0});
-		bk.setPaymentMethod("E-wallet");
-		
+		// testing get data from readUser.java
+		assertEquals(expectedName, actualUserName);
+
+		bk.setDayTime(DayTime);
+		bk.setStartStation(start);
+		bk.setEndStation(end);
+		bk.setPassengerTypeAndQty(qty);
+		bk.setPaymentMethod(payment);
+
 		double actualTotalFare = bk.getTotalFare();
 		double expectedTotalFare = 4.8;
 		//testing correct after applying discount/surcharge
@@ -42,18 +56,74 @@ public class IntegrationTesting1 {
 		double actualFareAfterPaymentDiscount = bk.getFinalFare();
 		double expectedFareAfterPaymentDiscount = 4.8;
 		//testing correct fare after applying payment method discount surcharge
+
+		// testing correct after applying discount/surcharge
+		assertEquals(expectedTotalFare, actualTotalFare, 0.01);
+
+		double actualFareAfterPaymentDiscount = bk.getFareDiscount();
+		// testing correct fare after applying payment method discount surcharge
+
 		assertEquals(expectedFareAfterPaymentDiscount, actualFareAfterPaymentDiscount, 0.01);
-		
-		
-		boolean actualPaymentResult = bk.confirmAndPay();
-		//testing can proceed payment if it is a valid payment method
-		assertTrue(actualPaymentResult);
-		
+
+		bk.confirmAndPay();
+		String actualPaymentStatus = bk.getPaymentStatus();
+		String expectedPaymentStatus = "Completed";
+		// testing can proceed payment if it is a valid payment method
+		assertEquals(expectedPaymentStatus, actualPaymentStatus);
+
 		boolean actualEmailReceipt = bk.printReceipt();
-		//testing can print receipt
+		// testing can print receipt
 		assertTrue(actualEmailReceipt);
-		
+	}
+
 	
+	
+	
+	
+	private Object[] getDataToTestGuest() {
+
+		return new Object[] {
+				// guest, 1 student, from Bangsar to KL Sentral, using Online Banking
+				new Object[] {"guest", "", "Joe", "joe@gg.gg", "014785236985", "Joe", "2025-09-30T06:45", 
+						"Bangsar", "KL Sentral", new int[] { 0, 0, 0, 1 }, "Online Banking", 1.68, 1.60 }
+		};
+	}
+
+	@Test
+	@Parameters(method = "getDataToTestGuest")
+	public void testGuestCreateBooking(String userType, String id, String name, String email, String phoneNumber,
+			String expectedName, String DayTime, String start, String end, int[] qty, String payment,
+			double expectedTotalFare, double expectedFareAfterPaymentDiscount) {
+		booking bk = new booking();
+
+		bk.setUser(userType, id, name, email, phoneNumber);
+		String actualUserName = bk.getGuestName();
+		// testing guest can create booking
+		assertEquals(expectedName, actualUserName);
+
+		bk.setDayTime(DayTime);
+		bk.setStartStation(start);
+		bk.setEndStation(end);
+		bk.setPassengerTypeAndQty(qty);
+		bk.setPaymentMethod(payment);
+
+		double actualTotalFare = bk.getTotalFare();
+		// testing correct after applying discount/surcharge
+		assertEquals(expectedTotalFare, actualTotalFare, 0.01);
+
+		double actualFareAfterPaymentDiscount = bk.getFareDiscount();
+		// testing correct fare after applying payment method discount surcharge
+		assertEquals(expectedFareAfterPaymentDiscount, actualFareAfterPaymentDiscount, 0.01);
+
+		bk.confirmAndPay();
+		String actualPaymentStatus = bk.getPaymentStatus();
+		String expectedPaymentStatus = "Completed";
+		// testing can proceed payment if it is a valid payment method
+		assertEquals(expectedPaymentStatus, actualPaymentStatus);
+
+		boolean actualEmailReceipt = bk.printReceipt();
+		// testing can print receipt
+		assertTrue(actualEmailReceipt);
 	}
 
 }

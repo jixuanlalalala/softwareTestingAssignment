@@ -114,7 +114,7 @@ public class bookingUnitTest {
 	        new Object[] {new int[] {51, 51, 51, 0}}
 	    };
 	}
-
+	
 	
 	@Test(expected = IllegalArgumentException.class)
 	@Parameters(method ="getParamsForInvalidPassengersTypes")

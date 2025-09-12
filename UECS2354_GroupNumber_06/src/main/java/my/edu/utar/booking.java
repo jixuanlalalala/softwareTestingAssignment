@@ -174,6 +174,25 @@ public class booking {
     /*
     private void handleNewUser(String userid, String name, String email, String phone) {
 
+<<<<<<< HEAD
+=======
+		if(email== null || email.trim().isEmpty())
+			throw new IllegalArgumentException("email cannot be empty or null");
+		
+		if(!email.matches("^[\\w.-]+@[\\w.-]+\\.\\w+$"))
+			throw new IllegalArgumentException("Invalid email format") ;
+		
+		if(phone== null || phone.trim().isEmpty())
+			throw new IllegalArgumentException("phoneNumber cannot be empty or null");
+		
+		if(!phone.matches("\\d{10,12}") )
+			throw new IllegalArgumentException("Invalid phone number format");
+    	
+    	User user = new User(userid, name, email, phone);
+    	this.user = user;
+        AddNewUser anu = new AddNewUser(fu);
+        anu.addUser(user, "test_user.txt");
+>>>>>>> branch 'main' of https://github.com/jixuanlalalala/softwareTestingAssignment.git
         
     }
     /*
@@ -200,7 +219,7 @@ public class booking {
         this.guestEmail = email;
         this.guestPhone = phone;
         AddGuest ag = new AddGuest();
-        ag.addGuest(name, email, phone, "guest.txt");
+        ag.addGuest(name, email, phone, "test_guest.txt");
     }
     */
     
@@ -209,10 +228,18 @@ public class booking {
 		return user;
 	}
     
+
     public String getGuest() {
     	return guestName + "|" + guestEmail + "|" + guestPhone;
     }
+    //to get the guest name
+	public String getGuestName() {
+		return guestName;
+	}
 
+	public void setGuestName(String guestName) {
+		this.guestName = guestName;
+	}
 
 	// Travel date and time
     public void setDayTime(String DayTime) {
@@ -379,6 +406,13 @@ public class booking {
     protected paymentMethodAdjustment createAdjustment() {
         return new paymentMethodAdjustment();
     }
+    
+    public double getFareDiscount() {
+    	paymentMethodAdjustment pma = new paymentMethodAdjustment();
+    	this.finalFare = pma.applyPaymentDiscount(this.paymentMethod, this.totalFare);
+    	
+    	return this.finalFare;
+    }
 
     public double getFinalFare() {
         paymentMethodAdjustment pma = createAdjustment();
@@ -407,17 +441,13 @@ public class booking {
     }
     
     // Process payment
-    public boolean confirmAndPay() {
+    public void confirmAndPay() {
     	payment py = new payment();
-    	this.setPaymentStatus("Completed");
     	
-    	if(paymentMethod == null || paymentMethod.trim().isEmpty())
-    		throw new IllegalArgumentException("payment Method is empty");
-    	
-    	if(!paymentMethod.equals("E-Wallet") && !paymentMethod.equals("Credit Card") && !paymentMethod.equals("Online Banking"))
-    		throw new IllegalArgumentException("Invalid payment method");
-    	
-    	return py.processPayment(paymentMethod);
+    	if(py.processPayment(paymentMethod))
+    		this.setPaymentStatus("Completed");
+    	else
+    		this.setPaymentStatus("Pending");
     }
     
     // Print receipt

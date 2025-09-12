@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 1|John|a@b.com|555
 2205922|Lim Zhen Cheng|limzc@gmail.com|0123456789
 2205922|Lim Zhen Cheng|limzc@gmail.com|0123456789
@@ -24,4 +25,20 @@
 2205922|Lim Zhen Cheng|limzc@gmail.com|0123456789
 2205922|Lim Zhen Cheng|limzc@gmail.com|0123456789
 2205922|Lim Zhen Cheng|limzc@gmail.com|0123456789
+2205922|Lim Zhen Cheng|limzc@gmail.com|0123456789
+=======
+1|John|a@b.com|555
+2|Jane|jj@jj.cc|2222222222
+2|Jane|jj@jj.cc|01234567890
+2|Jane|jj@jj.cc|01234567890
+2|Jane|jj@jj.cc|01234567890
+2|Jane|jj@jj.cc|01234567890
+2|Jane|jj@jj.cc|01234567890
+2|Jane|jj@jj.cc|01234567890
+2|Jane|jj@jj.cc|01234567890
+2|Jane|jj@jj.cc|01234567890
+2|Jane|jj@jj.cc|01234567890
+2|Jane|jj@jj.cc|01234567890
+2|Jane|jj@jj.cc|01234567890
+>>>>>>> branch 'main' of https://github.com/jixuanlalalala/softwareTestingAssignment.git
 2205922|Lim Zhen Cheng|limzc@gmail.com|0123456789
