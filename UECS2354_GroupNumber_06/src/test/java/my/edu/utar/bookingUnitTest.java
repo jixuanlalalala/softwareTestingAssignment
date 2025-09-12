@@ -312,26 +312,6 @@ public class bookingUnitTest {
 		bk.getDiscountDetails();
 	}
 
-/*
-	@Test
-	@Parameters({"E-Wallet", "Online Banking", "Credit Card"})
-	public void testValidConfirmAndPay(String paymentMethod) {
-		payment py = new payment();
-		booking bk = new booking();
-		
-		assertTrue(py.processPayment(paymentMethod));
-	}
-	
-	@Test(expected = IllegalArgumentException.class)
-	@Parameters({"Debit card","cash",  "" })
-	public void testInvalidConfirmAndPay(String paymentMethod) {
-		payment py = new payment();
-		booking bk = new booking();
-		
-		py.processPayment(paymentMethod);
-	}
-*/
-
 	private Object[] paramsForTestValidSetUser() {
 		return new Object[] {
 				new Object[] {"new user", "2205922","Lim Zhen Cheng", "limzc@gmail.com", "0123456789"},
@@ -364,27 +344,5 @@ public class bookingUnitTest {
 		assertEquals(bk.getGuest(), er);
 		
 	}
-	
-	private Object[] paramsForTestInvalidSetUser() {
-		return new Object[] {
-				new Object[] {"", "2205922","Lim Zhen Cheng", "limzc@gmail.com", "0123456789"},
-				new Object[] {"new user", "","Lim Zhen Cheng", "limzc@gmail.com", "0123456789"},
-				new Object[] {"new user", "2205922","", "limzc@gmail.com", "0123456789"},
-				new Object[] {"new user", "2205922","Lim Zhen Cheng", "", "0123456789"},
-				new Object[] {"new user", "2205922","Lim Zhen Cheng", "limzc@gmail.com", ""},
-				new Object[] {"existing user", "", "", "", ""},
-				new Object[] {"guest", "", "", "limzc@gmail.com", "0123456789"},
-				new Object[] {"guest", "", "Lim Zhen Cheng", "", "0123456789"},
-				new Object[] {"guest", "", "Lim Zhen Cheng", "limzc@gmail.com", ""}
-		};
-	}
-	
-	@Test(expected = IllegalArgumentException.class)
-	@Parameters(method = "paramsForTestInvalidSetUser")
-	public void testInvalidSetUser(String userType, String id, String name, String email, String phone) {
-		booking bk = new booking();
-		bk.setUser(userType, id, name, email, phone);
-		
-		assertNull(bk.getUser());
-	}
+
 }

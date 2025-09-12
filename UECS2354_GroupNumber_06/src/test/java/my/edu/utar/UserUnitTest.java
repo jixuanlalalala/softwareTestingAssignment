@@ -67,10 +67,10 @@ public class UserUnitTest {
 		user.setEmail(email);
 		user.setPhoneNumber(phone);
 		
-		String arId = user.getId();
-		String arName = user.getName();
-		String arEmail = user.getEmail();
-		String arPhone = user.getPhoneNumber();
+		user.getId();
+		user.getName();
+		user.getEmail();
+		user.getPhoneNumber();
 	}
 	
 }
