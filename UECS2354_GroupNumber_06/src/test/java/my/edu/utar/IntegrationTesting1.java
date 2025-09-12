@@ -48,21 +48,12 @@ public class IntegrationTesting1 {
 		bk.setPaymentMethod(payment);
 
 		double actualTotalFare = bk.getTotalFare();
-		double expectedTotalFare = 4.8;
 		//testing correct after applying discount/surcharge
 		assertEquals(expectedTotalFare,actualTotalFare,0.01); 
 		
 		
 		double actualFareAfterPaymentDiscount = bk.getFinalFare();
-		double expectedFareAfterPaymentDiscount = 4.8;
 		//testing correct fare after applying payment method discount surcharge
-
-		// testing correct after applying discount/surcharge
-		assertEquals(expectedTotalFare, actualTotalFare, 0.01);
-
-		double actualFareAfterPaymentDiscount = bk.getFareDiscount();
-		// testing correct fare after applying payment method discount surcharge
-
 		assertEquals(expectedFareAfterPaymentDiscount, actualFareAfterPaymentDiscount, 0.01);
 
 		bk.confirmAndPay();
