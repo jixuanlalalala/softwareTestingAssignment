@@ -1,10 +1,6 @@
 package my.edu.utar;
 
 import static org.junit.Assert.*;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -56,16 +52,15 @@ public class AddGuestIntegrationTest {
 	private Object[] getParamsForTestAddGuestInvalid() {
 		
 		return new Object[]{
-            new Object[]{null, "john@mail.com", "12345678901"},   // null name
-            new Object[]{"", "john@mail.com", "12345678901"},     // empty name
-            new Object[]{"John", null, "12345678901"},            // null email
-            new Object[]{"John", "", "12345678901"},              // empty email
-            new Object[]{"John", "invalid-email", "12345678901"},              // email not contain @
-            new Object[]{"John", "johnmail.com", "12345678901"},  // no @ in email
-            new Object[]{"John", "john@mail.com", null},         // null phone
-            new Object[]{"John", "john@mail.com", "123-456-789"},         // phone non digit
-            new Object[]{"John", "john@mail.com", ""},           // empty phone
-            new Object[]{"John", "john@mail.com", "123456789"},        // 9-digit phone
+            new Object[]{null, "john@mail.com", "12345678901"},    // null name
+            new Object[]{"", "john@mail.com", "12345678901"},      // empty name
+            new Object[]{"John", null, "12345678901"},             // null email
+            new Object[]{"John", "", "12345678901"},               // empty email
+            new Object[]{"John", "invalid-email", "12345678901"},  // invalid email format
+            new Object[]{"John", "john@mail.com", null},           // null phone
+            new Object[]{"John", "john@mail.com", "123-456-789"},  // phone non digit
+            new Object[]{"John", "john@mail.com", ""},             // empty phone
+            new Object[]{"John", "john@mail.com", "123456789"},    // 9-digit phone
             new Object[]{"John", "john@mail.com", "1234567890123"} // 13-digit phone
         };
 	}

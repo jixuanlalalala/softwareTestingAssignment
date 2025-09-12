@@ -1,6 +1,5 @@
 package my.edu.utar;
 
-import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -22,12 +21,10 @@ public class AddNewUserUnitTest {
 	private Object[] getParamsForTestAddUserValid() {
 
 	    return new Object[]{
-	        // Test Case 13: Valid user with phone number length 10
 	        new Object[]{
 	            new User("1", "John Doe", "john.doe@email.com", "1234567890"),
 	            new String[]{"1|John Doe|john.doe@email.com|1234567890"}    
 	        },
-	        // Test Case 14: Valid user with phone number length 12
 	        new Object[]{
 	            new User("3", "Alice", "alice@company.com", "123456789012"), 
 	            new String[]{"3|Alice|alice@company.com|123456789012"} 
@@ -67,7 +64,7 @@ public class AddNewUserUnitTest {
 	        new Object[]{new  User("1", "John", null, "1234567890") },
 	        // Test Case 7: User with empty email
 	        new Object[]{new User("1", "John", "", "1234567890") },
-	        // Test Case 8: User with invalid email format (no @)
+	        // Test Case 8: User with invalid email format
 	        new Object[]{new User("1", "John", "invalid-email", "1234567890") },
 	        
 	        // Test Case 9: User with null phone

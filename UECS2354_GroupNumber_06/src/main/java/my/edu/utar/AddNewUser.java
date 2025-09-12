@@ -21,26 +21,43 @@ public class AddNewUser {
         }
     	
     	if (user.getId() == null || user.getId().trim().isEmpty()) {
-			throw new IllegalArgumentException("Invalid ID !");
+			throw new IllegalArgumentException("id cannot be empty or null");
 		}
     	
     	if (user.getName() == null || user.getName().trim().isEmpty()) {
-			throw new IllegalArgumentException("Invalid name !");
+			throw new IllegalArgumentException("name cannot be empty or null");
 		}
     	
-		if ( user.getEmail() == null ||  user.getEmail().isEmpty() || ! user.getEmail().contains("@")) {
+		if ( user.getEmail() == null ||  user.getEmail().isEmpty()) {
+			throw new IllegalArgumentException("email cannot be empty or null");
+		}
+		
+		if (!user.getEmail().matches("^[\\w.-]+@[\\w.-]+\\.\\w+$")) {
 			throw new IllegalArgumentException("Invalids Email !");
 		}
 		
 		if (user.getPhoneNumber() == null || user.getPhoneNumber().trim().isEmpty()) {
-			throw new IllegalArgumentException("Invalid Phone Number !");
+			throw new IllegalArgumentException("phoneNumber cannot be empty or null");
 		}
-		if (!(user.getPhoneNumber().trim().length() >= 10 && user.getPhoneNumber().trim().length() <= 12)) {
-			throw new IllegalArgumentException("Invalid Phone Number length !");
-		}
-		if (!user.getPhoneNumber().matches("\\d+")) { // Checks if the string contains only digits
-		    throw new IllegalArgumentException("Invalid Phone Number format ! Must be all digits.");
-		}
+//		if (!(user.getPhoneNumber().trim().length() >= 10 && user.getPhoneNumber().trim().length() <= 12)) {
+//			throw new IllegalArgumentException("Invalid Phone Number length !");
+//		}
+//		if (!user.getPhoneNumber().matches("\\d+")) { // Checks if the string contains only digits
+//		    throw new IllegalArgumentException("Invalid Phone Number format ! Must be all digits.");
+//		}
+		
+		if(!user.getPhoneNumber().matches("\\d{10,12}") )
+			throw new IllegalArgumentException("Invalid phone number format");
+		
+		
+//		if(!email.matches("^[\\w.-]+@[\\w.-]+\\.\\w+$"))
+//			throw new IllegalArgumentException("Invalid email format") ;
+		
+//		if(phoneNumber== null || phoneNumber.trim().isEmpty())
+//			throw new IllegalArgumentException();
+		
+//		if(!phoneNumber.matches("\\d{10,12}") )
+//			throw new IllegalArgumentException("Invalid phone number format");
     	
 //    	// append new  User To Original User String
 		String[] existing  = fu.readStringsFromFile(filePath);

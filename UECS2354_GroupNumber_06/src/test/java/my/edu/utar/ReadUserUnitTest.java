@@ -22,19 +22,19 @@ public class ReadUserUnitTest {
 	// Valid Test
 	private Object[] getParamsForTestReadUserValid() {
 		return new Object[]{
-		        // TC-R-3: File is empty
+		        // File is empty
 		        new Object[]{
 		            "123", // userID (valid)
 		            new String[]{}, // existing file content (empty)
 		            null // Expected Result: null
 		        },
-		        // TC-R-4: Record does not exist
+		        // Record does not exist
 		        new Object[]{
 		            "999", // userID (valid, not found)
 		            new String[]{"1|John|a@b.com|555", "2|Jane|j@e.com|666"}, // existing file content
 		            null // Expected Result: null
 		        },
-		        // TC-R-5: Record exists (Happy Path)
+		        // Record exists (Happy Path)
 		        new Object[]{
 		            "2", // userID (valid, found)
 		            new String[]{"1|John|a@b.com|555", "2|Jane|j@e.com|666"}, // existing file content
@@ -52,11 +52,8 @@ public class ReadUserUnitTest {
 
         // Create AddUser with mock
         ReadUser ruMock = new ReadUser(mockFu);
-
-        // Call addUser
         User AR = ruMock.readUser(userID,filePath);
         
-        // Use a helper assertion or check for null
         if (ER == null) {
             assertNull(AR);
         } else {
@@ -67,36 +64,16 @@ public class ReadUserUnitTest {
             assertEquals(ER.getPhoneNumber(), AR.getPhoneNumber());
         }
     }
-	
-//	private Object[] getParamsForTestReadUserValidNull() {
-//       
-//    }
-//	@Test
-//	@Parameters(method = "getParamsForTestReadUserValidNull")
-//    public void testReadUserValidNull(String userID, String[] existing){
-//        
-//		when(mockFu.readStringsFromFile(anyString())).thenReturn(existing);
-//
-//        // Create AddUser with mock
-//        ReadUser ruMock = new ReadUser(mockFu);
-//
-//        // Call addUser
-//        User AR = ruMock.readUser(userID, filePath);
-//        
-//        assertNull(AR);
-//
-//    }
-//	
-//	
+
 	// Invalid test
 	private Object[] getParamsForTestReadUserInvalid() {
 		return new Object[]{
-		        // TC-R-1: userID is null
+		        // userID is null
 		        new Object[]{
 		            null, // userID (invalid)
 		            new String[]{"1|John|a@b.com|555"}, // existing file content
 		        },
-		        // TC-R-2: userID is empty
+		        // userID is empty
 		        new Object[]{
 		            "", // userID (invalid)
 		            new String[]{"1|John|a@b.com|555"}, // existing file content

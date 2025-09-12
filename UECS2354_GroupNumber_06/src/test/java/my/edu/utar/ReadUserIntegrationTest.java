@@ -1,10 +1,6 @@
 package my.edu.utar;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.*;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -23,19 +19,19 @@ public class ReadUserIntegrationTest {
 	// Valid Test
 	private Object[] getParamsForTestReadUserValid() {
 		return new Object[]{
-		        // TC-R-3: File is empty
+		        // File is empty
 		        new Object[]{
 		            "123", // userID (valid)
 		            new String[]{}, // existing file content (empty)
 		            null // Expected Result: null
 		        },
-		        // TC-R-4: Record does not exist
+		        // Record does not exist
 		        new Object[]{
 		            "999", // userID (valid, not found)
 		            new String[]{"1|John|a@b.com|555", "2|Jane|j@e.com|666"}, // existing file content
 		            null // Expected Result: null
 		        },
-		        // TC-R-5: Record exists
+		        // Record exists
 		        new Object[]{
 		            "2", // userID (valid, found)
 		            new String[]{"1|John|a@b.com|555", "2|Jane|j@e.com|666"}, // existing file content
@@ -51,10 +47,8 @@ public class ReadUserIntegrationTest {
         
 		fu.writeStringsToFile(existing, filePath);
 
-        // Call addUser
         User AR = ru.readUser(userID,filePath);
         
-        // Use a helper assertion or check for null
         if (ER == null) {
             assertNull(AR);
         } else {
@@ -69,12 +63,12 @@ public class ReadUserIntegrationTest {
 	// Invalid test
 	private Object[] getParamsForTestReadUserInvalid() {
 		return new Object[]{
-		        // TC-R-1: userID is null
+		        // userID is null
 		        new Object[]{
 		            null, // userID (invalid)
 		            new String[]{"1|John|a@b.com|555"}, // existing file content
 		        },
-		        // TC-R-2: userID is empty
+		        // userID is empty
 		        new Object[]{
 		            "", // userID (invalid)
 		            new String[]{"1|John|a@b.com|555"}, // existing file content

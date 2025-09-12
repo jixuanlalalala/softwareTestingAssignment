@@ -19,23 +19,20 @@ public class AddGuest {
     }
 	
 	public void addGuest(String name, String email, String phoneNumber, String filePath){
-		if (name == null || name.trim().isEmpty()) {
-			throw new IllegalArgumentException("Invalid name !");
-		}
+		if (name == null || name.trim().isEmpty()) 
+			throw new IllegalArgumentException("name cannot be empty or null");
 		
-		if (email == null || email.isEmpty() || !email.contains("@")) {
+		if (email == null || email.isEmpty()) 
+			throw new IllegalArgumentException("email cannot be empty or null");
+		
+		if (!email.matches("^[\\w.-]+@[\\w.-]+\\.\\w+$")) 
 			throw new IllegalArgumentException("Invalids Email !");
-		}
 		
-		if (phoneNumber == null || phoneNumber.trim().isEmpty()) {
-			throw new IllegalArgumentException("Invalid Phone Number !");
-		}
-		if (!(phoneNumber.trim().length() >= 10 && phoneNumber.trim().length() <= 12)) {
-			throw new IllegalArgumentException("Invalid Phone Number length !");
-		}
-		if (!phoneNumber.matches("\\d+")) { // Checks if the string contains only digits
-		    throw new IllegalArgumentException("Invalid Phone Number format ! Must be all digits.");
-		}
+		if (phoneNumber == null || phoneNumber.trim().isEmpty()) 
+			throw new IllegalArgumentException("phoneNumber cannot be empty or null");
+		
+		if(!phoneNumber.matches("\\d{10,12}") )
+			throw new IllegalArgumentException("Invalid phone number format");
 		
 		String stringToWrite = name + "|" + email + "|" + phoneNumber;
 		
