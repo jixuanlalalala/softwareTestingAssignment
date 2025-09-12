@@ -141,7 +141,7 @@ public class booking {
     	User user = new User(userid, name, email, phone);
     	this.user = user;
         AddNewUser anu = new AddNewUser(fu);
-        anu.addUser(user, "user.txt");
+        anu.addUser(user, "test_user.txt");
         
     }
     
@@ -168,14 +168,22 @@ public class booking {
         this.guestEmail = email;
         this.guestPhone = phone;
         AddGuest ag = new AddGuest();
-        ag.addGuest(name, email, phone, "guest.txt");
+        ag.addGuest(name, email, phone, "test_guest.txt");
     }
     
     //to get the user
     public User getUser() {
 		return user;
 	}
+    
+    //to get the guest name
+	public String getGuestName() {
+		return guestName;
+	}
 
+	public void setGuestName(String guestName) {
+		this.guestName = guestName;
+	}
 
 	// Travel date and time
     public void setDayTime(String DayTime) {
@@ -310,10 +318,12 @@ public class booking {
     //show fare after discount
     public double getFareDiscount() {
     	paymentMethodAdjustment pma = new paymentMethodAdjustment();
-    	pma.applyPaymentDiscount(this.paymentMethod, this.totalFare);
+    	this.finalFare = pma.applyPaymentDiscount(this.paymentMethod, this.totalFare);
     	
-    	return this.totalFare;
+    	return this.finalFare;
     }
+    
+    
     
     //show the curremt BookingStatus
     public String getBookingStatus() {
@@ -326,9 +336,12 @@ public class booking {
     }
     
     // Process payment
-    public boolean confirmAndPay() {
+    public void confirmAndPay() {
     	payment py = new payment();
-    	return py.processPayment(paymentMethod);
+    	if(py.processPayment(paymentMethod))
+    		this.setPaymentStatus("Completed");
+    	else
+    		this.setPaymentStatus("Pending");
     }
     
     // Print receipt
