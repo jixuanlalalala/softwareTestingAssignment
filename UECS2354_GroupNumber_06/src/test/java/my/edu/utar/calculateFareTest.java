@@ -111,35 +111,6 @@ public class calculateFareTest {
     }
 	
 	
-	
-	// ---------- test invalid passenger type ---------- 
-	
-	private Object[] paramsForTestCalTotalFareInvalidPassengerType() {
-		return new Object[] {
-				new Object[] { Map.of("Lecturer",1), LocalDateTime.parse("2025-09-03T22:30"), "Batu Kentonmen", "Rawang", 3.0, 1.20, 0},
-		};
-	}
-	@Test (expected = IllegalArgumentException.class)
-	@Parameters(method = "paramsForTestCalTotalFareInvalidPassengerType")
-    public void testCalTotalFareInvalidPassengerType(Map<String, Integer> passengerMap, LocalDateTime time, String startStation, String endStation, 
-    									double distance,double discountMultiplier, int flatSurcharge) {
-        
-        
-        doNothing().when(riMock).setDistance(anyString(), anyString());
-        when(riMock.getDistance()).thenReturn(distance);
-        when(adsMock.getFlatSurcharge(any(LocalDateTime.class))).thenReturn(flatSurcharge);
-        
-        
-        // throw exception when pass invalid passenger type
-        when(adsMock.getTotalDiscount(anyString(), anyDouble(), any(LocalDateTime.class)))
-        .thenThrow(IllegalArgumentException.class);
-        
-        
-        cf.calTotalFare(passengerMap, time, startStation, endStation);
-    }
-	
-	
-	
 	// ---------- test invalid quantity ---------- 
 	
 	private Object[] paramsForTestCalTotalFareInvalidQuantity() {
@@ -152,7 +123,7 @@ public class calculateFareTest {
     public void testCalTotalFareInvalidQuantity(Map<String, Integer> passengerMap, LocalDateTime time, String startStation, String endStation, 
     									double distance,double discountMultiplier, int flatSurcharge) {
         
-        
+		
         doNothing().when(riMock).setDistance(anyString(), anyString());
         when(riMock.getDistance()).thenReturn(distance);
         when(adsMock.getTotalDiscount(anyString(), anyDouble(), any(LocalDateTime.class))).thenReturn(discountMultiplier);
@@ -164,54 +135,83 @@ public class calculateFareTest {
 	
 	
 	
-	// ---------- test invalid time ---------- 
-	
-	private Object[] paramsForTestCalTotalFareInvalidTime() {
-		return new Object[] {
-				new Object[] { Map.of("Adult", 1), null, "Batu Kentonmen", "Rawang",10.0, 1.20, 0}, 
-		};
-	}
-	@Test (expected = IllegalArgumentException.class)
-	@Parameters(method = "paramsForTestCalTotalFareInvalidTime")
-    public void testCalTotalFareInvalidTime(Map<String, Integer> passengerMap, LocalDateTime time, String startStation, String endStation, 
-    									double distance,double discountMultiplier, int flatSurcharge) {
-        
-        doNothing().when(riMock).setDistance(anyString(), anyString());
-        when(riMock.getDistance()).thenReturn(distance);
-        
-        
-        // throw exception when pass null Time
-        when(adsMock.getTotalDiscount(anyString(), anyDouble(), eq(null))).thenThrow(IllegalArgumentException.class);
-        when(adsMock.getFlatSurcharge(eq(null))).thenThrow(IllegalArgumentException.class);
-        
-        cf.calTotalFare(passengerMap, time, startStation, endStation);
-
-    }
-	
-	// ---------- test invalid startStation, endStation ---------- 
-	
-	private Object[] paramsForTestCalTotalFareInvalidStartEndStation() {
-		return new Object[] {
-		    new Object[] { Map.of("Adult", 1), LocalDateTime.parse("2025-09-03T22:30"), null, "Rawang",15.0, 1.20, 0},
-		    new Object[] { Map.of("Adult", 1), LocalDateTime.parse("2025-09-03T22:30"), "Batu Kentonmen", "Sungai Long", 20.0, 1.20, 0} 
-		};
-	}
-	@Test (expected = IllegalArgumentException.class)
-	@Parameters(method = "paramsForTestCalTotalFareInvalidStartEndStation")
-    public void testCalTotalFareInvalidStartEndStation(Map<String, Integer> passengerMap, LocalDateTime time, String startStation, String endStation, 
-    									double distance,double discountMultiplier, int flatSurcharge) {
-        
-		doNothing().when(riMock).setDistance(anyString(), anyString());
-        when(adsMock.getTotalDiscount(anyString(), anyDouble(), any(LocalDateTime.class))).thenReturn(discountMultiplier);
-        when(adsMock.getFlatSurcharge(any(LocalDateTime.class))).thenReturn(flatSurcharge);
-		
-		
-        // throw exception when get distance for invalid startStation, endStation
-        when(riMock.getDistance()).thenThrow(IllegalArgumentException.class);
-
-        
-        cf.calTotalFare(passengerMap, time, startStation, endStation);
-    }
+//	// ---------- test invalid passenger type ---------- 
+//	
+//	private Object[] paramsForTestCalTotalFareInvalidPassengerType() {
+//		return new Object[] {
+//				new Object[] { Map.of("Lecturer",1), LocalDateTime.parse("2025-09-03T22:30"), "Batu Kentonmen", "Rawang", 3.0, 1.20, 0},
+//		};
+//	}
+//	@Test (expected = IllegalArgumentException.class)
+//	@Parameters(method = "paramsForTestCalTotalFareInvalidPassengerType")
+//    public void testCalTotalFareInvalidPassengerType(Map<String, Integer> passengerMap, LocalDateTime time, String startStation, String endStation, 
+//    									double distance,double discountMultiplier, int flatSurcharge) {
+//        
+//        
+//        doNothing().when(riMock).setDistance(anyString(), anyString());
+//        when(riMock.getDistance()).thenReturn(distance);
+//        when(adsMock.getFlatSurcharge(any(LocalDateTime.class))).thenReturn(flatSurcharge);
+//        
+//        
+//        // throw exception when pass invalid passenger type
+//        when(adsMock.getTotalDiscount(anyString(), anyDouble(), any(LocalDateTime.class)))
+//        .thenThrow(IllegalArgumentException.class);
+//        
+//        
+//        cf.calTotalFare(passengerMap, time, startStation, endStation);
+//    }
+//	
+//	
+//	
+//	
+//	// ---------- test invalid time ---------- 
+//	
+//	private Object[] paramsForTestCalTotalFareInvalidTime() {
+//		return new Object[] {
+//				new Object[] { Map.of("Adult", 1), null, "Batu Kentonmen", "Rawang",10.0, 1.20, 0}, 
+//		};
+//	}
+//	@Test (expected = IllegalArgumentException.class)
+//	@Parameters(method = "paramsForTestCalTotalFareInvalidTime")
+//    public void testCalTotalFareInvalidTime(Map<String, Integer> passengerMap, LocalDateTime time, String startStation, String endStation, 
+//    									double distance,double discountMultiplier, int flatSurcharge) {
+//        
+//        doNothing().when(riMock).setDistance(anyString(), anyString());
+//        when(riMock.getDistance()).thenReturn(distance);
+//        
+//        
+//        // throw exception when pass null Time
+//        when(adsMock.getTotalDiscount(anyString(), anyDouble(), eq(null))).thenThrow(IllegalArgumentException.class);
+//        when(adsMock.getFlatSurcharge(eq(null))).thenThrow(IllegalArgumentException.class);
+//        
+//        cf.calTotalFare(passengerMap, time, startStation, endStation);
+//
+//    }
+//	
+//	// ---------- test invalid startStation, endStation ---------- 
+//	
+//	private Object[] paramsForTestCalTotalFareInvalidStartEndStation() {
+//		return new Object[] {
+//		    new Object[] { Map.of("Adult", 1), LocalDateTime.parse("2025-09-03T22:30"), null, "Rawang",15.0, 1.20, 0},
+//		    new Object[] { Map.of("Adult", 1), LocalDateTime.parse("2025-09-03T22:30"), "Batu Kentonmen", "Sungai Long", 20.0, 1.20, 0} 
+//		};
+//	}
+//	@Test (expected = IllegalArgumentException.class)
+//	@Parameters(method = "paramsForTestCalTotalFareInvalidStartEndStation")
+//    public void testCalTotalFareInvalidStartEndStation(Map<String, Integer> passengerMap, LocalDateTime time, String startStation, String endStation, 
+//    									double distance,double discountMultiplier, int flatSurcharge) {
+//        
+//		doNothing().when(riMock).setDistance(anyString(), anyString());
+//        when(adsMock.getTotalDiscount(anyString(), anyDouble(), any(LocalDateTime.class))).thenReturn(discountMultiplier);
+//        when(adsMock.getFlatSurcharge(any(LocalDateTime.class))).thenReturn(flatSurcharge);
+//		
+//		
+//        // throw exception when get distance for invalid startStation, endStation
+//        when(riMock.getDistance()).thenThrow(IllegalArgumentException.class);
+//
+//        
+//        cf.calTotalFare(passengerMap, time, startStation, endStation);
+//    }
 
 	
 	

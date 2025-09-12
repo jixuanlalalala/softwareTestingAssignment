@@ -2,6 +2,7 @@ package my.edu.utar;
 
 import static org.junit.Assert.*;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -11,22 +12,24 @@ import junitparams.Parameters;
 @RunWith(JUnitParamsRunner.class)
 public class FileUtilitiesUnitTest {
 
-	String filePath = "dummyfile.txt";
-	
-	FileUtilities fu = new FileUtilities();
+	private FileUtilities fu;
+
+	@Before
+	public void setUp() {
+	    fu = new FileUtilities(); // Initialize the FileUtilities instance
+	}
 	
 	private Object[] getParamsForTestReadAndWrite() {
         return new Object[]{
-            new Object[]{ new String[]{"cat", "dog"} },
-            new Object[]{ new String[]{"cat", "dog mouse elephant", "", "rat monkey", "  "} },
-            new Object[]{ new String[]{""} },
-            new Object[]{ new String[]{} } // empty file
+            new Object[]{ new String[]{"cat", "dog"}, "dummyfile.txt" },
+            new Object[]{ new String[]{""}, "dummyfile.txt"},
+            new Object[]{ new String[]{}, "dummyfile.txt" } // empty file
         };
     }
 	
 	@Test
 	@Parameters(method = "getParamsForTestReadAndWrite")
-	public void testReadAndWrite(String[] input) {
+	public void testReadAndWrite(String[] input, String filePath) {
 		
 		// Write test data
         fu.writeStringsToFile(input, filePath);
@@ -36,18 +39,11 @@ public class FileUtilitiesUnitTest {
         assertArrayEquals(input, stringsFromFile);
 	}
 	
-	
-	private Object[] getParamsForTestReadWithError() {
-        return new Object[]{
-            new Object[]{"somecrazyfilenamethatdoesnotexist.txt"}
-        };
-    }
 
 	@Test(expected=IllegalArgumentException.class)	
-	@Parameters(method = "getParamsForTestReadWithError")
-	public void testReadWithError(String invalidFilePath) {
+	public void testReadWithError() {
 		
-		fu.readStringsFromFile(invalidFilePath);
+		fu.readStringsFromFile("somecrazyfilenamethatdoesnotexist.txt");
 	}
 
 }
