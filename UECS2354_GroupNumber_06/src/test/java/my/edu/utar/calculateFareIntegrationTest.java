@@ -45,6 +45,8 @@ public class calculateFareIntegrationTest {
 		
 	}
 	
+	// valid test
+	
 	private Object[][] getDataFortestValidCalTotalFare() {
 	    Object[][] data = new Object[linesreadsurcharge.size()][];
 
@@ -82,21 +84,15 @@ public class calculateFareIntegrationTest {
 	}
 	
 	
-	
-	
-	// Invalid data 
+	// Invalid test
 	
 	private Object[] parametersForTestIntegrationForInvalidCalTotalFare() {
 	    return new Object[] {
-	        new Object[] { Map.of("Lecturer", 1), LocalDateTime.parse("2025-09-03T22:30"), "Batu Kentonmen", "Rawang" },
-	        new Object[] { Map.of("Adult", -1), LocalDateTime.parse("2025-09-03T22:30"), "Batu Kentonmen", "Rawang" },
-	        new Object[] { Map.of("Adult", 1), LocalDateTime.parse("2025-09-03T22:30"), null, "Rawang" },
-	        new Object[] { Map.of("Adult", 1), LocalDateTime.parse("2025-09-03T22:30"), "Batu Kentonmen", "Sungai Long" },
-	        new Object[] { Map.of("Adult", 1), null, "Batu Kentonmen", "Rawang" }
+	    		new Object[] { Map.of("Adult", -1), LocalDateTime.parse("2025-09-03T22:30"), "Batu Kentonmen", "Rawang" }
 	    };
 	}
-	@Test(expected = IllegalArgumentException.class)
-	@Parameters
+	@Test (expected = IllegalArgumentException.class)
+	@Parameters (method="parametersForTestIntegrationForInvalidCalTotalFare")
 	public void testIntegrationForInvalidCalTotalFare(Map<String, Integer> passengerMap, LocalDateTime time, String start, String end) {
 		routeInfo ri = new routeInfo();
 	    applyDiscountSurcharge ads = new applyDiscountSurcharge();
@@ -105,5 +101,12 @@ public class calculateFareIntegrationTest {
 	    
 	    cf.calTotalFare(passengerMap, time, start, end);
 	}
+	
+	
+//	new Object[] { Map.of("Lecturer", 1), LocalDateTime.parse("2025-09-03T22:30"), "Batu Kentonmen", "Rawang" }, 	// invalid passenger type
+//  new Object[] { Map.of("Adult", -1), LocalDateTime.parse("2025-09-03T22:30"), "Batu Kentonmen", "Rawang" },		// invalid quantity
+//  new Object[] { Map.of("Adult", 1), null, "Batu Kentonmen", "Rawang" },											// invalid time
+//  new Object[] { Map.of("Adult", 1), LocalDateTime.parse("2025-09-03T22:30"), null, "Rawang" },					// invalid Start Station 
+//  new Object[] { Map.of("Adult", 1), LocalDateTime.parse("2025-09-03T22:30"), "Batu Kentonmen", "Sungai Long" }	// invalid End Station 
 
 }
