@@ -33,7 +33,6 @@ public class AddNewUserIntegrationTest {
 	@Parameters(method = "getParamsForTestAddUserValid")
     public void testAddUserValid(User user, String ER){
 		
-
         anu.addUser(user, filePath);
 
         String[] result= fu.readStringsFromFile(filePath);
@@ -79,8 +78,6 @@ public class AddNewUserIntegrationTest {
 	@Parameters(method = "getParamsForTestAddUserInvalid")
     public void testAddUserInvalid(User user){
 		
-
         anu.addUser(user, filePath);
-
     }
 }

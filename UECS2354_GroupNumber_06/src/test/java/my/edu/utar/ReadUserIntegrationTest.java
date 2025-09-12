@@ -19,26 +19,25 @@ public class ReadUserIntegrationTest {
 	// Valid Test
 	private Object[] getParamsForTestReadUserValid() {
 		return new Object[]{
-		        // File is empty
-		        new Object[]{
-		            "123", // userID (valid)
-		            new String[]{}, // existing file content (empty)
-		            null // Expected Result: null
-		        },
-		        // Record does not exist
-		        new Object[]{
-		            "999", // userID (valid, not found)
-		            new String[]{"1|John|a@b.com|555", "2|Jane|j@e.com|666"}, // existing file content
-		            null // Expected Result: null
-		        },
-		        // Record exists
-		        new Object[]{
-		            "2", // userID (valid, found)
-		            new String[]{"1|John|a@b.com|555", "2|Jane|j@e.com|666"}, // existing file content
-		            new User("2", "Jane", "j@e.com", "666") // Expected Result: User object
-		        }
-		    };
-
+	        // File is empty
+	        new Object[]{
+	            "123", // userID (valid)
+	            new String[]{}, // existing file content (empty)
+	            null // Expected Result: null
+	        },
+	        // Record does not exist
+	        new Object[]{
+	            "999", // userID (valid, not found)
+	            new String[]{"1|John|a@b.com|555", "2|Jane|j@e.com|666"}, // existing file content
+	            null // Expected Result: null
+	        },
+	        // Record exists
+	        new Object[]{
+	            "2", // userID (valid, found)
+	            new String[]{"1|John|a@b.com|555", "2|Jane|j@e.com|666"}, // existing file content
+	            new User("2", "Jane", "j@e.com", "666") // Expected Result: User object
+	        }
+	    };
     }
 	
 	@Test
@@ -63,17 +62,17 @@ public class ReadUserIntegrationTest {
 	// Invalid test
 	private Object[] getParamsForTestReadUserInvalid() {
 		return new Object[]{
-		        // userID is null
-		        new Object[]{
-		            null, // userID (invalid)
-		            new String[]{"1|John|a@b.com|555"}, // existing file content
-		        },
-		        // userID is empty
-		        new Object[]{
-		            "", // userID (invalid)
-		            new String[]{"1|John|a@b.com|555"}, // existing file content
-		        }
-		    };
+	        // userID is null
+	        new Object[]{
+	            null, // userID (invalid)
+	            new String[]{"1|John|a@b.com|555"}, // existing file content
+	        },
+	        // userID is empty
+	        new Object[]{
+	            "", // userID (invalid)
+	            new String[]{"1|John|a@b.com|555"}, // existing file content
+	        }
+	    };
     }
 	
 	@Test (expected=IllegalArgumentException.class)
@@ -84,6 +83,5 @@ public class ReadUserIntegrationTest {
 		
         ru.readUser(userID, filePath);
     }
-
 }
 

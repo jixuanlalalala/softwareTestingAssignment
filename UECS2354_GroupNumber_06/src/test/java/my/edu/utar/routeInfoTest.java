@@ -4,13 +4,11 @@ import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized.Parameter;
 
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
@@ -63,12 +61,10 @@ public class routeInfoTest {
 	}
 	@Test
 	@Parameters(method = "getDataFortestValidSetDistance")
-	
 	public void testSetDistanceValidStation(String start, String end, double ER) {
+		
 		ri.setDistance(start, end);
-		
 		double AR = ri.getDistance();
-		
 		assertEquals(ER , AR , 0.01);
 	}
 	

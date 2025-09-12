@@ -16,7 +16,7 @@ public class AddGuestIntegrationTest {
 	FileUtilities fu = new FileUtilities();
 	AddGuest ag = new AddGuest(fu);
 	
-	
+	// valid test
 	
 	private Object[] getParamsForTestAddGuestValid() {
 		
@@ -47,7 +47,7 @@ public class AddGuestIntegrationTest {
         assertEquals(ER, result[result.length-1]);
     }
 	
-	
+	// invalid test
 	
 	private Object[] getParamsForTestAddGuestInvalid() {
 		

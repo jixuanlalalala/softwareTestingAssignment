@@ -16,7 +16,7 @@ public class FileUtilitiesUnitTest {
 
 	@Before
 	public void setUp() {
-	    fu = new FileUtilities(); // Initialize the FileUtilities instance
+	    fu = new FileUtilities();
 	}
 	
 	private Object[] getParamsForTestReadAndWrite() {
