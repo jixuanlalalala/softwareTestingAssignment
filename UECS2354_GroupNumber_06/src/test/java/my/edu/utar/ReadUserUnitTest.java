@@ -30,17 +30,16 @@ public class ReadUserUnitTest {
 	        // Record does not exist
 	        new Object[]{
 	            "999", // userID (valid, not found)
-	            new String[]{"1|John|a@b.com|555", "2|Jane|j@e.com|666"}, // existing file content
+	            new String[]{"1|John|a@b.com|1234567890", "2|Jane|j@e.com|1234567890"}, // existing file content
 	            null // Expected Result: null
 	        },
-	        // Record exists (Happy Path)
+	        // Record exists
 	        new Object[]{
 	            "2", // userID (valid, found)
-	            new String[]{"1|John|a@b.com|555", "2|Jane|j@e.com|666"}, // existing file content
-	            new User("2", "Jane", "j@e.com", "666") // Expected Result: User object
+	            new String[]{"1|John|a@b.com|1234567890", "2|Jane|j@e.com|1234567890"}, // existing file content
+	            new User("2", "Jane", "j@e.com", "1234567890") // Expected Result: User object
 	        }
 	    };
-
     }
 	
 	@Test
@@ -70,12 +69,12 @@ public class ReadUserUnitTest {
 	        // userID is null
 	        new Object[]{
 	            null, // userID (invalid)
-	            new String[]{"1|John|a@b.com|555"}, // existing file content
+	            new String[]{"1|John|a@b.com|1234567890", "2|Jane|j@e.com|1234567890"}, // existing file content
 	        },
 	        // userID is empty
 	        new Object[]{
 	            "", // userID (invalid)
-	            new String[]{"1|John|a@b.com|555"}, // existing file content
+	            new String[]{"1|John|a@b.com|1234567890", "2|Jane|j@e.com|1234567890"}, // existing file content
 	        }
 	    };
     }

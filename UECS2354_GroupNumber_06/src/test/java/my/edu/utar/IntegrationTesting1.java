@@ -18,13 +18,13 @@ public class IntegrationTesting1 {
 	private Object[] getDataToTestUser() {
 
 		return new Object[] {
-				// existing user, 2 adults, from Bangsar to KL Sentral, using E-wallet
-				new Object[] { "existing user", "1", "", "", "", "John", "2025-09-30T06:45", 
-						"Bangsar", "KL Sentral", new int[] { 2, 0, 0, 0 }, "E-wallet", 4.8, 4.8 },
-				
-				// new user, 3 senior citizens, from Bangsar to KL Sentral, using Credit Card
-				new Object[] { "new user", "2", "Jane", "jj@jj.cc", "01234567890", "Jane", "2025-09-30T06:45",
-						"Bangsar", "KL Sentral", new int[] { 0, 3, 0, 0 }, "Credit Card", 3.6, 3.78 } 
+			// new user, 3 senior citizens, from Bangsar to KL Sentral, using Credit Card
+			new Object[] { "new user", "2", "Jane", "jj@jj.cc", "01234567890", "Jane", "2025-09-30T06:45",
+					"Bangsar", "KL Sentral", new int[] { 0, 3, 0, 0 }, "Credit Card", 3.6, 3.78 },
+			
+			// existing user, 2 adults, from Bangsar to KL Sentral, using E-wallet
+			new Object[] { "existing user", "2", "", "", "", "Jane", "2025-09-30T06:45", 
+					"Bangsar", "KL Sentral", new int[] { 2, 0, 0, 0 }, "E-wallet", 4.8, 4.8 }
 		};
 	}
 
@@ -74,9 +74,9 @@ public class IntegrationTesting1 {
 	private Object[] getDataToTestGuest() {
 
 		return new Object[] {
-				// guest, 1 student, from Bangsar to KL Sentral, using Online Banking
-				new Object[] {"guest", "", "Joe", "joe@gg.gg", "014785236985", "Joe", "2025-09-30T06:45", 
-						"Bangsar", "KL Sentral", new int[] { 0, 0, 0, 1 }, "Online Banking", 1.68, 1.60 }
+			// guest, 1 student, from Bangsar to KL Sentral, using Online Banking
+			new Object[] {"guest", "", "Joe", "joe@gg.gg", "014785236985", "Joe", "2025-09-30T06:45", 
+					"Bangsar", "KL Sentral", new int[] { 0, 0, 0, 1 }, "Online Banking", 1.68, 1.60 }
 		};
 	}
 
@@ -102,7 +102,7 @@ public class IntegrationTesting1 {
 		// testing correct after applying discount/surcharge
 		assertEquals(expectedTotalFare, actualTotalFare, 0.01);
 
-		double actualFareAfterPaymentDiscount = bk.getFareDiscount();
+		double actualFareAfterPaymentDiscount = bk.getFinalFare();
 		// testing correct fare after applying payment method discount surcharge
 		assertEquals(expectedFareAfterPaymentDiscount, actualFareAfterPaymentDiscount, 0.01);
 
